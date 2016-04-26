@@ -12,7 +12,7 @@ class Client(models.Model):
 
 
 
-class clientContactDetails(models.Model):
+class ClientContactDetails(models.Model):
   clientId = models.ForeignKey(Client)
   telephoneNum1 = models.CharField(max_length = 11)
   telephoneNum2 = models.CharField(max_length = 11)
@@ -25,7 +25,7 @@ class clientContactDetails(models.Model):
   author = models.ForeignKey(User)
   addedAt = models.DateTimeField(auto_now_add = True)
 
-class legal_details(models.Model):
+class Legal_details(models.Model):
   cleintId = models.ForeignKey(Client)
   personal_ID = models.CharField(max_length=12)
   city = models.CharField(max_length = 20)
@@ -36,13 +36,32 @@ class legal_details(models.Model):
   author = models.ForeignKey(User)
   addedAt = models.DateTimeField(auto_now_add = True)
 
-class account(models.Model):
+class Account(models.Model):
   account = models.EmailField()
   clientId = models.ForeignKey(Client)
   account_added_at = models.DateTimeField()
   inactive = models.CharField(max_length = 1)
   author = models.ForeignKey(User)
   addedAt = models.DateTimeField(auto_now_add = True)
+
+class Order_status(models.Model):
+  status = models.CharField(max_length = 20)
+
+class Order(models.Model):
+  clientID = models.ForeignKey(Client)
+  client_contacts = models.ForeignKey(ClientContactDetails)
+  tel_or_email = models.CharField(max_length = 5)
+  status = models.ForeignKey(Order_status)
+  manager = models.ForeignKey(User)
+  
+
+
+class Order_process(models.Model):
+  order = models.ForeignKey(Order)
+  step = models.IntegerField()
+  step_description = models.TextField()
+  date_step = models.DateTimeField()
+  
 
 
 
