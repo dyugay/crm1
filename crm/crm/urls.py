@@ -21,5 +21,5 @@ from clients.views import test, createOrder
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', test, name='test'),
-    url(r'^new/.*$', createOrder, name='createOrder'),
+    url(r'^new.*$', createOrder, name='createOrder'),
 ]
