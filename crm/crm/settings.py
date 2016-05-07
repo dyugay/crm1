@@ -53,10 +53,12 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'crm.urls'
 
+template_dir = BASE_DIR + '/templates'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [template_dir],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +83,8 @@ DATABASES = {
         'NAME':'crm',
         'USER': 'crm',
         'PASSWORD': 'pass',
-        'HOST': 'localhost',
+        'HOST': '',
+        'PORT': '',
     }
 }
 

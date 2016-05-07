@@ -63,7 +63,15 @@ class Order_process(models.Model):
   date_step = models.DateTimeField()
   
 
+class Billing(models.Model):
+  account = models.ForeignKey(Account)
+  month = models.CharField(max_length = 2)
+  year = models.CharField(max_length = 4)
+  summ = models.DecimalField(max_digits = 8, decimal_places = 2)
+  author =  models.ForeignKey(User)
+  addedAt = models.DateTimeField(auto_now_add = True)
 
+ 
 
 
 
