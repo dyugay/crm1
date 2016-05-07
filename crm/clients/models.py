@@ -21,7 +21,7 @@ class ClientContactDetails(models.Model):
   email2 = models.EmailField()
   firstName = models.CharField(max_length = 20)
   lastName = models.CharField(max_length = 40)
-  midleName = models.CharField(max_length = 40)
+  middleName = models.CharField(max_length = 40)
   author = models.ForeignKey(User)
   addedAt = models.DateTimeField(auto_now_add = True)
 
