@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from clients.forms import newOrderForm, loginForm
 from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 
@@ -20,6 +21,7 @@ def main(request, *args, **kwargs):
 
 
 # new order creation 
+@login_required
 def createOrder(request, *args, **kwargs):
  if request.method == 'POST':
   form = newOrderForm(request.POST)
@@ -54,7 +56,9 @@ def loginUser(request, *args, **kwargs):
       user = authenticate(username=username, password=password)
       if user.is_active:
        login(request, user)
-       url = reverse('main')
+       url = request.GET.get('next')
+       if url is None:
+        url = reverse('main')
        return HttpResponseRedirect(url)
       else:
        return HttpResponse('user is not active') 

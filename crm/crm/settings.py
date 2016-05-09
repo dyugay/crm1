@@ -53,6 +53,7 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'crm.urls'
 
+#directory where templates are located
 template_dir = BASE_DIR + '/templates'
 
 TEMPLATES = [
@@ -87,6 +88,9 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+#path for login, it's for degorator @login_required
+LOGIN_URL = '/login/'
 
 
 # Password validation
