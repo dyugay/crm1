@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from clients.views import test, createOrder
+from clients.views import main, createOrder, order
+from clients.views import loginUser, logoutUser
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', test, name='test'),
-    url(r'^new.*$', createOrder, name='createOrder'),
+    url(r'^$', main, name='main'),
+    url(r'^new_order.*$', createOrder, name='createOrder'),
+    url(r'^order/.*$', order, name='order'),
+    url(r'^login/.*$', loginUser, name='loginUser'),
+    url(r'^logout/.*$', logoutUser, name='logoutUser'),
 ]
