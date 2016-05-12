@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from clients.models import Client, Order, ClientContactDetails
-from clients.models import Legal_details, Account, Order_status
+from clients.models import Legal_details, Account
 from clients.models import Order, Order_process, Billing
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 class newOrderForm(forms.Form):
   firstName = forms.CharField(max_length = 20) 
@@ -14,17 +15,39 @@ class newOrderForm(forms.Form):
   lastName = forms.CharField(max_length = 40)
   middleName = forms.CharField(max_length = 40)
   step_description = forms.CharField(widget = forms.Textarea)
-  date_step = forms.DateTimeField()
+ # date_step = forms.DateTimeField()
   manager = forms.CharField(max_length = 20)
 
 
 
 
 
-# save order
-  #def save(self):
- #  order = 
-
+# create order
+  def save(self):
+     #create client
+     manager = User.objects.get(username=self.cleaned_data.get('manager'))
+     client = Client(author = manager)
+     client.save()
+    
+     #create client contact details
+     clientContactDetails = ClientContactDetails(clientId = client, 
+                                                 firstName = self.cleaned_data.get('firstName'),
+                                                 telephoneNum1 = self.cleaned_data.get('telephoneNum1'),
+                                                 email1 = self.cleaned_data.get('email1'),
+                                                 lastName = self.cleaned_data.get('lastName'),
+                                                 middleName = self.cleaned_data.get('middleName'),
+                                                 author = manager     
+                                                  )
+     clientContactDetails.save()
+    
+     #create client legal details
+     legalDetails = Legal_details(clientId = client,
+                                  city = self.cleaned_data.get('city'),
+                                  company_name = self.cleaned_data.get('company_name'),
+                                  author = manager
+                                  )
+     legalDetails.save()  
+   
    
   # return order
 

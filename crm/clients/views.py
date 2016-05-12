@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from clients.forms import newOrderForm, loginForm
@@ -27,10 +28,11 @@ def createOrder(request, *args, **kwargs):
   form = newOrderForm(request.POST)
   if form.is_valid():
    order = form.save()
-   url = '/order/'
+   url = reverse('order')
    return HttpResponseRedirect(url)
  else:   
-  form = newOrderForm
+   initial_data = {'manager': request.user}
+   form = newOrderForm(initial = initial_data)
  
  return render(request, 
                  'createOrder.html',

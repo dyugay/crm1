@@ -10,6 +10,10 @@
 <body>
  Hi, this is a creation order page!
 
+ {% for e in form.non_field_errors %}
+   <div>{{e}} </div>
+ {% endfor  %}
+
 <form method="post">
   <fieldset> 
    {% for field in form %}
@@ -17,6 +21,11 @@
       {{field.label}}
       {{field}}
      </div>
+   
+     {% if field.errors %}
+       <div>{{field.errors}} </div>
+     {% endif %}
+
    {% endfor %}
   </fieldset>
 

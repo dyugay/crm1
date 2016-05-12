@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+# -*- coding: utf-8 -*-
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Client(models.Model):
-  companyOrPerson = models.CharField(max_length = 7)
+ # companyOrPerson = models.CharField(max_length = 7)
   author = models.ForeignKey(User)
   addedAt = models.DateTimeField(auto_now_add = True)
 
@@ -26,7 +26,7 @@ class ClientContactDetails(models.Model):
   addedAt = models.DateTimeField(auto_now_add = True)
 
 class Legal_details(models.Model):
-  cleintId = models.ForeignKey(Client)
+  clientId = models.ForeignKey(Client)
   personal_ID = models.CharField(max_length=12)
   city = models.CharField(max_length = 20)
   address = models.CharField(max_length = 40)
@@ -45,19 +45,30 @@ class Account(models.Model):
   author = models.ForeignKey(User)
   addedAt = models.DateTimeField(auto_now_add = True)
 
-class Order_status(models.Model):
-  status = models.CharField(max_length = 20)
+#class Order_status(models.Model):
+#  status = models.CharField(max_length = 20)
 
 class Order(models.Model):
+  status_choice = (
+                    ('INTS', 'заинтересованность'),
+                    ('EVAL', 'оценка'),
+                    ('OFER', 'предложение'),
+                    ('BILL', 'выставлен счет'),
+                    ('PROC', 'выполнение заказа'),
+                    ('DONE', 'заказ выполнен'),
+                    ('FAIL', 'отказ'),
+                   )
+
   clientID = models.ForeignKey(Client)
   client_contacts = models.ForeignKey(ClientContactDetails)
   tel_or_email = models.CharField(max_length = 5)
-  status = models.ForeignKey(Order_status)
+  status = models.CharField(max_length = 20, choices=status_choice)
   manager = models.ForeignKey(User)
   
 
 
 class Order_process(models.Model):
+
   order = models.ForeignKey(Order)
   step = models.IntegerField()
   step_description = models.TextField()
