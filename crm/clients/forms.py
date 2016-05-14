@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 class newOrderForm(forms.Form):
+  call_or_email = forms.CharField(max_length = 5)
   firstName = forms.CharField(max_length = 20) 
   telephoneNum1 = forms.CharField(max_length = 11)
   email1 = forms.EmailField(max_length = 100) 
@@ -49,8 +50,28 @@ class newOrderForm(forms.Form):
                                   )
      legalDetails.save()  
    
+     
+
+     #create order
+     status = 'INTS'
+     order = Order(clientId = client,
+                   client_contacts = clientContactDetails,
+                   status = status,
+                   call_on = self.cleaned_data.get('call_on'),
+                   manager = manager, 
+                   call_or_email = self.cleaned_data.get('call_or_email')
+                   )   
+     order.save()
+    
    
-  # return order
+     #create order_process
+     order_process = Order_process(order = order,
+                                   step = 1,
+                                   step_description = self.cleaned_data.get('step_description'),
+                                   
+                                   )      
+ 
+     return order
 
 
 class loginForm(forms.Form):
