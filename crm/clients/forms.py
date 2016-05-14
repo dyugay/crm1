@@ -16,8 +16,9 @@ class newOrderForm(forms.Form):
   middleName = forms.CharField(max_length = 40)
   step_description = forms.CharField(widget = forms.Textarea)
  # date_step = forms.DateTimeField()
+  call_on = forms.DateField(widget = forms.SelectDateWidget(empty_label="Nothing"))
   manager = forms.CharField(max_length = 20)
-
+  
 
 
 

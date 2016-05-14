@@ -63,6 +63,7 @@ class Order(models.Model):
   client_contacts = models.ForeignKey(ClientContactDetails)
   tel_or_email = models.CharField(max_length = 5)
   status = models.CharField(max_length = 20, choices=status_choice)
+  call_on = models.DateField(blank = True)
   manager = models.ForeignKey(User)
   
 
