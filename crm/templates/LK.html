@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+<html lang='ru'>
+
+<head>
+		{% block head %}
+			{{block.super}}
+		{% endblock %}
+</head>
+
+<body>
+	{% block nav %}
+		{{block.super}}
+	{% endblock %}
+	{% block content %}
+	<div class='container-fluid'>
+		{% for e in form.non_field_errors %}
+			<div> {{e}} </div>
+		{% endfor  %}
+		
+		<form method="post">
+			<legend>
+				<div class='form-inline'>
+					<label for='id_clientId'>ЛК для Клиента</label>
+					<a href="{% url 'client' clientId=form.clientId.value %}"><input class='form-control' name='clientId' id='id_clientId' value='{{form.clientId.value}}' size='10' readonly></a>
+				</div>
+			</legend>
+			
+			
+			<div class='row'>
+				<div class='form-group col-sm-2'>
+					<label for='id_LK'>{{form.LK.label}}</label>
+					<input class='form-control' name='LK' id='id_LK' placeholder='Личный Кабинет' value='{{form.LK.value}}' type='email'>
+				</div>
+				
+				<div class='form-group col-sm-2'>
+					<label for='id_LK_added_at'>{{form.LK_added_at.label}}</label>
+					<input class='form-control' name='LK_added_at' id='id_LK_added_at'  value='{{form.LK_added_at.value}}' type='date'>
+				</div>
+
+			</div>
+
+			<button class='btn btn-primary' type='submit'>Сохранить</button>
+			
+			
+			<p>&nbsp;</p>
+			{% for field in form %}
+				{% if field.errors %}
+					<div class="row">
+						<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+						<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+					</div>
+				{% endif %}
+			{% endfor %}
+		
+			
+			<p>&nbsp;</p>
+			<p>&nbsp;</p>
+			
+			<div class='row'>
+				<div class='form-group col-sm-2'>
+					<label for='id_author'>{{form.author.label}}</label>
+					<input class='form-control' name='author' id='id_author'  type='text' value='{{form.author.value}}' readonly>
+				</div>
+				
+				<div class='form-group col-sm-2'>
+					<label for='id_changedOn'>{{form.changedOn.label}}</label>		 
+					<input class='form-control' name='changedOn' id='id_changedOn' value='{{form.changedOn.value}}' type='date' readonly>
+				</div>
+				
+			</div>
+		
+			
+			
+			
+			{% csrf_token %}
+			<div class="col-sm-1 invisible">
+				{{form.LK_Id}}
+			</div>
+		</form>
+	</div>
+	{% endblock %}
+</body>
+
+</html>

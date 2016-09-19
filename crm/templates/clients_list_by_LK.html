@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+
+<html>
+<head>
+ 
+		{% block head %}
+			{{block.super}}
+		{% endblock %}
+</head>
+
+
+<body>
+	{% block nav %}
+		{{block.super}}
+	{% endblock %}
+	
+	{% block content %}
+ <div class="container-fluid">
+	 
+	<form method="post">
+		{% for e in form.non_field_errors %}
+			<div> {{e}} </div>
+		{% endfor  %}
+
+	
+		{% for field in form %}
+			{% if field.errors %}
+				<div class="row">
+					<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+					<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+				</div>
+			{% endif %}
+		{% endfor %}
+		<button class="btn btn-primary" type="submit">Применить фильтр</button>
+
+
+		<table class="table table-striped table-hover table-bordered table-condensend">
+			 <caption><strong>Клиенты (всего: {{paginator.count}})</strong></caption>
+		
+			 <thead>
+			 <tr>
+					<th>Номер Клиента</th>
+					<th>Личный кабинет</th>
+			 </tr>
+			 </thead>
+			 
+			 <tbody>
+					<tr>
+						<td><input class="form-control" name="clientId" id="id_clientId" value="{{form.clientId.value}}" type="text"></td>
+						<td><input class='form-control' name='LK' id='id_LK' value="{{form.LK.value}}" type="text"></td>
+					</tr>
+				{% for LK in page.object_list%}
+					<tr>
+						<td><a href="{{LK.client.get_url}}">{{LK.client.id}}</a></td>
+						<td><a href="{%url 'changeClientLK' LK_Id=LK.id %}">{{LK.LK}}</a></td>
+					</tr>
+					
+				{% endfor %}
+		      </tbody> 
+		 </table>
+
+		{% csrf_token %}
+		
+	</form>
+	  <ul class="pagination">
+		 {% if left_offset > 1 %}  
+	
+
+			<li><a href="/clients_by_LK/1/?LK={{form.LK.value}}&clientId={{form.clientId.value}}">{{pg}}   <<  </a></li>
+
+		 {% endif %} 
+	
+	     {% for pg in display_range %}    
+	         
+	
+			    {% if pg == page.number %}
+			      <li class="active">
+	     	    {% else %}
+		 	      <li>
+			    {% endif %}
+
+		           <a href="/clients_by_LK/{{pg}}/?LK={{form.LK.value}}&clientId={{form.clientId.value}}">{{pg}}</a>
+
+		          </li>
+	   
+		 {% endfor %}
+	
+	
+	     
+	     {% if right_offset < paginator.num_pages %}
+
+		          <li><a href="/clients_by_LK/{{paginator.num_pages}}/?LK={{form.LK.value}}&clientId={{form.clientId.value}}">{{pg}}  >> </a></li>
+
+	     {% endif %} 			  
+	  </ul>     
+
+  </div>
+  {% endblock %} 
+</body>	 
+</html>

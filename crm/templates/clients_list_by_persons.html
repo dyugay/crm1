@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+{% extends "main.html" %}
+
+<html>
+	<head>
+		{% block head %}
+			{{block.super}}
+		{% endblock %}
+	</head>
+
+
+<body>
+	{% block nav %}
+		{{block.super}}
+	{% endblock %}
+	{% block content %}
+		<div class="container-fluid">
+			 
+			<form method="post">
+				{% for e in form.non_field_errors %}
+					<div> {{e}} </div>
+				{% endfor  %}
+			
+				<div class='row'>
+					<div class='form-group col-sm-2'>
+						<label for='id_firstName'>{{form.firstName.label}}</label>
+						<input class='form-control' name='firstName' id='id_firstName' placeholder='Имя' value='{{form.firstName.value}}' type='text'>
+					</div>
+					
+					<div class='form-group col-sm-2'>
+						<label for='id_lastName'>{{form.lastName.label}}</label>
+						<input class='form-control' name='lastName' id='id_lastName' placeholder='Фамилия' value='{{form.lastName.value}}' type='text'>
+					</div>
+					
+					<div class='form-group col-sm-2'>
+						<label for='id_telephoneNum'>{{form.telephoneNum.label}}</label>
+						<input class='form-control' name='telephoneNum' id='id_telephoneNum' placeholder='+7-xxx-xxx-xx-xx' value='{{form.telephoneNum.value}}' type='tel'>
+					</div>
+					
+					<div class='form-group col-sm-2'>
+						<label for='id_email'>{{form.email.label}}</label>
+						<input class='form-control' name='email' id='id_email' placeholder='e-mail' value='{{form.email.value}}' type='text'>
+					</div>
+					
+		
+					
+					
+				</div>
+				<button class="btn btn-primary" type="submit">Применить фильтр</button>
+		
+				
+		
+			
+				{% for field in form %}
+					{% if field.errors %}
+						<div class="row">
+							<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+							<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+						</div>
+					{% endif %}
+				{% endfor %}
+		
+				{% csrf_token %}
+			</form>
+		
+			<table class="table table-striped table-hover table-bordered table-condensend">
+				 <caption><strong>Клиенты (всего: {{paginator.count}})</strong></caption>
+		
+				 <thead>
+				 <tr>
+						<th>Номер Клиента</th>
+						<th>Имя</th>
+						<th>Фамилия</th>
+						<th>Тел.1</th>
+						<th>Тел.2</th>
+						<th>Тел.3</th>
+						<th>E-mail1</th>
+						<th>E-mail2</th>
+				 </tr>
+				 </thead>
+				 
+				 <tbody>
+		
+				    
+					{% for person in page.object_list%}
+						
+						<tr>
+							<td><a href="{{person.client.get_url}}">{{person.client.id}}</a></td>
+							<td><a href="{%url 'changePerson' personId=person.id %}">{{person.firstName}}</a></td>
+							<td>{{person.lastName}}</td>
+							<td>{{person.telephoneNum1}}</td>
+							<td>{{person.telephoneNum2}}</td>
+							<td>{{person.telephoneNum3}}</td>
+							<td>{{person.email1}}</td>
+							<td>{{person.email2}}</td>
+						</tr>
+						
+					{% endfor %}
+			      </tbody> 
+			 </table>
+		
+		
+			  <ul class="pagination">
+				 {% if left_offset > 1 %}  
+			
+		
+					<li><a href="/clients_by_persons/1/?email={{form.email.value}}&telephoneNum={{form.telephoneNum.value}}&firstName={{form.firstName.value}}&lastName={{form.lastName.value}}">{{pg}}   <<  </a></li>
+		
+				 {% endif %} 
+			
+			     {% for pg in display_range %}    
+			         
+			
+					    {% if pg == page.number %}
+					      <li class="active">
+			     	    {% else %}
+				 	      <li>
+					    {% endif %}
+		
+				           <a href="/clients_by_persons/{{pg}}/?email={{form.email.value}}&telephoneNum={{form.telephoneNum.value}}&firstName={{form.firstName.value}}&lastName={{form.lastName.value}}">{{pg}}</a>
+		
+				          </li>
+			   
+				 {% endfor %}
+			
+			
+			     
+			     {% if right_offset < paginator.num_pages %}
+		
+				          <li><a href="/clients_by_persons/{{paginator.num_pages}}/?email={{form.email.value}}&telephoneNum={{form.telephoneNum.value}}&firstName={{form.firstName.value}}&lastName={{form.lastName.value}}">{{pg}}  >> </a></li>
+		
+			     {% endif %} 			  
+			  </ul>     
+		
+		</div>
+		{% endblock %}
+</body>	 
+</html>

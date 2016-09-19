@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+{% extends "main.html" %}
+
+<html lang="ru">
+	
+	<head>
+		{% block head %}
+			{{block.super}}
+		{% endblock %}
+		
+	</head>
+	
+	
+	<body>
+		{% block nav %}
+			{{block.super}}
+		{% endblock %}
+		{% block content %}
+			<div class="container-fluid">
+				<form method="post">
+					<legend>
+						<div class='form-inline'>
+							Создание клиента
+						</div>
+					</legend>
+					
+					<div class='row'>
+						<div class='form-group col-sm-2'>
+							<label for='id_firstName'>{{form.firstName.label}}</label>
+							<input class='form-control' name='firstName' id='id_firstName' placeholder='Имя' value='{{form.firstName.value}}' type='text'>
+						</div>
+						
+						<div class='form-group col-sm-2'>
+							<label for='id_telephoneNum1'>{{form.telephoneNum1.label}}</label>
+							<input class='form-control' name='telephoneNum1' id='id_telephoneNum1' placeholder='+7-xxx-xxx-xx-xx' pattern='\+7-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}' value='{{form.telephoneNum1.value}}' type='tel'>
+						</div>
+						
+						<div class='form-group col-sm-2'>
+							<label for='id_email1'>{{form.email1.label}}</label>
+							<input class='form-control' name='email1' id='id_email1' placeholder='e-mail' value='{{form.email1.value}}' type='email'>
+						</div>
+						
+						<div class='form-group col-sm-2'>
+							<label for='id_city'>{{form.city.label}}</label>
+							<input class='form-control' name='city' id='id_city' placeholder='Город' value='{{form.city.value}}' type='text'>
+						</div>
+					
+					</div>
+				
+					
+					
+									<div class='row'>
+						<div class='form-group col-sm-2'>
+							<label for='id_status'>{{form.status.label}}</label>
+							<select class='form-control' name ='status' id='id_status'>
+										<option value="INTS" {% if form.status.value == 'INTS'%}selected{% endif %}>Заинтересованность</option>
+										<option value="EVAL" {% if form.status.value == 'EVAL'%}selected{% endif %}>Оценка</option>
+										<option value="OFER" {% if form.status.value == 'OFER'%}selected{% endif %}>Подготовка предложения</option>
+										<option value="WAIT" {% if form.status.value == 'WAIT'%}selected{% endif %}>Ожидание решения клиента</option>
+										<option value="DVLR" {% if form.status.value == 'DVLR'%}selected{% endif %}>Доставка</option>
+										<option value="PROC" {% if form.status.value == 'PROC'%}selected{% endif %}>Выполнение заказа</option>
+										<option value="DONE" {% if form.status.value == 'DONE'%}selected{% endif %}>Заказ выполнен</option>
+										<option value="FAIL" {% if form.status.value == 'FAIL'%}selected{% endif %}>Отказ</option>
+							</select>
+							
+						</div>
+					</div>
+	
+	
+					<div class='row'>
+						<div class='form-group col-sm-2'>
+							<label for='id_call_or_email'>{{form.call_or_email.label}}</label>
+							<select class='form-control' name ='call_or_email' id='id_call_or_email' {% if form.orderId.value%}disabled{% endif %}>
+								<option value="call" {% if form.call_or_email.value == "call" %}selected{% endif %}>Звонок</option>
+								<option value="email" {% if form.call_or_email.value == "email" %}selected{% endif %}>Заявка</option>
+							</select>
+						</div>
+					</div>
+	
+	
+	
+					 <div class="row">
+						<div class="form-group col-sm-2">
+							<label for='id_step_description'>{{form.step_description.label}}</label>
+							<textarea class="form-control" rows="6" id="id_step_description" name="step_description" placeholder="Описание шага" >{{form.step_description.value}}</textarea>
+						</div>
+					</div>
+	
+					 <div class="row">
+						<div class="form-group col-sm-2">
+							<label for='id_call_on'>{{form.call_on.label}}</label>
+							<input class="form-control" id="id_call_on" name="call_on" value='{{form.call_on.value}}' type="date">
+						</div>
+					</div>
+					
+					
+					<div class='row'>
+						<div class='form-group col-sm-2'>
+							<label for='id_manager'>{{form.manager.label}}</label>
+							<select class='form-control' name="manager" id='id_manager'>
+								{% for user in users %}
+									{% if user.username == form.manager.value %}
+										<option selected>{{form.manager.value}}</option>
+									{% else %}
+										<option>{{user.username}}</option>
+									{% endif%}
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+	
+					
+					<button class='btn btn-primary' type='submit'>Создать</button>
+				
+				
+					<p>&nbsp;</p>
+					{% for field in form %}
+						{% if field.errors %}
+							<div class="row">
+								<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+								<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					<div class='row'>
+						<div class='form-group col-sm-2'>
+							<label for='id_author'>{{form.author.label}}</label>
+							<input class='form-control' name='author' id='id_author'  type='text' value='{{form.author.value}}' readonly>
+						</div>
+					</div>
+					
+					{% csrf_token %}
+				</form>
+			</div>
+		{% endblock %}
+	</body>
+
+</html>

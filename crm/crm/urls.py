@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """crm URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -15,15 +16,38 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from clients.views import main, createOrder, order
-from clients.views import loginUser, logoutUser
+from clients.views import main, createOrder, order, createPerson
+from clients.views import loginUser, logoutUser, get_orders_list
+from clients.views import client, changePerson, addLK, changeClientLK, addLegalDetails
+from clients.views import changeLegalDetails, createClient, get_clients_by_persons, get_clients_by_LK
+from clients.views import get_clients_by_legal_details
+from django.conf import settings
+from django.conf.urls.static import static
 
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', main, name='main'),
-    url(r'^new_order.*$', createOrder, name='createOrder'),
-    url(r'^order/.*$', order, name='order'),
-    url(r'^login/.*$', loginUser, name='loginUser'),
-    url(r'^logout/.*$', logoutUser, name='logoutUser'),
-]
+	url(r'^admin/', admin.site.urls),
+	url(r'^$', main, name='main'),
+	url(r'^new_order/(?P<clientId>\d+)*/*$', createOrder, name='createOrder'),
+	url(r'^order/(?P<orderId>\d+)*/*$', order, name='order'),
+	url(r'^login/.*$', loginUser, name='loginUser'),
+	url(r'^logout/.*$', logoutUser, name='logoutUser'),
+	url(r'^orders_list/(?P<pageNum>\d+)*/*/$', get_orders_list, name = 'get_orders_list'),
+	url(r'^client/(?P<clientId>\d+)*/*$', client, name="client"),
+	url(r'^new_client/$', createClient, name="createClient"),
+	url(r'^new_person/(?P<clientId>\d+)*/*$', createPerson, name='createPerson'),
+	url(r'^person/(?P<personId>\d+)*/*$', changePerson, name='changePerson'),
+	url(r'^new_LK/(?P<clientId>\d+)*/*$', addLK, name='addLK'),
+	url(r'^changeClientLK/(?P<LK_Id>\d+)*/*$', changeClientLK, name='changeClientLK'),
+	url(r'^addLegalDetails/(?P<clientId>\d+)*/*$', addLegalDetails, name='addLegalDetails'),
+	url(r'^changeLegalDetails/(?P<legal_details_id>\d+)*/*$', changeLegalDetails, name='changeLegalDetails'),
+	url(r'^clients_by_persons/(?P<pageNum>\d+)*/*$', get_clients_by_persons, name='get_clients_by_persons'),
+	url(r'^clients_by_LK/(?P<pageNum>\d+)*/*$', get_clients_by_LK, name='get_clients_by_LK'),
+	url(r'^clients_by_legal_details/(?P<pageNum>\d+)*/*$', get_clients_by_legal_details, name='get_clients_by_legal_details'),
+
+
+] 
+
+urlpatterns += staticfiles_urlpatterns()

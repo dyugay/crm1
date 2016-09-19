@@ -1,34 +1,56 @@
 <!DOCTYPE html>
 
+<html lang='ru'>
 
-<html>
- <head>
-
-  <p>Here is a login form</p>
- </head>
+	<head>
+		{%load static%}
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type='text/css' />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>	
+	
  
- 
- <body>
-   {% for e in form.non_field_errors %}
-      <div>{{e}} </div>
-   {% endfor %}
-  
-   <form method="post">
-    {% for field in form %}
-       <div>{{field.label}} {{field}}</div>
-     
-       {% if field.errors %}
-          {{field.errors}} 
-       {% endif %}
-    {% endfor %}
-  
-  
-
-     <div><button type="submit">Авторизация</button></div>
-
-    {% csrf_token %}
-   </form> 
- </body>
+	<body>
+		<div class='container-fluid'>
+			
+				
+				{% for e in form.non_field_errors %}
+				  <div>{{e}} </div>
+				{% endfor %}
+				
+				<form method="post">
+	
+					<div class='row'>
+							<div class='form-group col-sm-2'>
+								<label for='id_username'>{{form.username.label}}</label>
+								<input class='form-control' name='username' id='id_username'  type='text'>
+							</div>
+					</div>
+					
+					
+					<div class='row'>
+							<div class='form-group col-sm-2'>
+								<label for='id_password'>{{form.password.label}}</label>
+								<input class='form-control' name='password' id='id_password'  type='password'>
+							</div>
+					</div>
+					
+					 <div><button class='btn btn-primary' type="submit">Авторизация</button></div>
+					
+					
+					<p>&nbsp;</p>
+					{% for field in form %}
+						{% if field.errors %}
+							<div class="row">
+								<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+								<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% csrf_token %}
+				</form> 
+		</div>
+	</body>
 
 
 </html>

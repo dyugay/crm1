@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+{% extends "main.html" %}
+
+<html>
+	
+<head>
+
+	{% block head %}
+		{{block.super}}
+<!--
+	{% load static%}
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}" type='text/css'/>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+-->
+	{% endblock %}
+
+</head>
+
+
+<body>
+	{% block nav %}
+		{{block.super}}
+	{% endblock %}
+	{% block content %}
+	 <div class="container-fluid">
+	
+	 
+		<form method="post">
+			{% for e in form.non_field_errors %}
+				<div> {{e}} </div>
+			{% endfor  %}
+				
+	
+			<div class='row'>
+				<div class='form-group col-sm-2'>
+					<label for='id_orderDateBegin'>{{form.orderDateBegin.label}}</label>
+					<input class="form-control" id="id_orderDateBegin" name="orderDateBegin" value='{{form.orderDateBegin.value}}' type="date">
+				</div>
+				
+				<div class='form-group col-sm-2'>
+					<label for='id_orderDateEnd'>{{form.orderDateEnd.label}}</label>
+					<input class="form-control" id="id_orderDateEnd" name="orderDateEnd" value='{{form.orderDateEnd.value}}' type="date">
+				</div>
+			</div>
+	
+	
+			<div class='row'>
+				<div class='form-group col-sm-2'>
+					<label for='id_call_onBegin'>{{form.call_onBegin.label}}</label>
+					<input class="form-control" id="id_call_onBegin" name="call_onBegin" value='{{form.call_onBegin.value}}' type="date">
+				</div>
+				
+				<div class='form-group col-sm-2'>
+					<label for='id_call_onEnd'>{{form.call_onEnd.label}}</label>
+					<input class="form-control" id="id_call_onEnd" name="call_onEnd" value='{{form.call_onEnd.value}}' type="date">
+				</div>
+			</div>
+			
+			<button class="btn btn-primary" type="submit">Применить фильтр</button>
+	<!--
+			<p>&nbsp;</p>
+	-->
+			{% for field in form %}
+				{% if field.errors %}
+					<div class="row">
+						<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+						<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+					</div>
+				{% endif %}
+			{% endfor %}
+	
+			
+	
+			<table class="table table-striped table-hover table-bordered table-condensend">
+				 <caption><strong>Заказы (всего: {{paginator.count}})</strong></caption>
+	
+				 <thead>
+				 <tr>
+						<th>Клиент</th>
+						<th>Заказ</th>
+						<th>Контактное лицо</th>
+						<th>Телефон</th>
+						<th>E-mail</th>
+						<th>Запрос клиента</th>
+						<th>Статус</th>
+						<th>Когда связаться</th>
+						<th>Менеджер заказа</th>
+						<th>Когда создан</th>
+				 </tr>
+				 </thead>
+				 
+				 <tbody>
+					<tr>
+						<td><input class="form-control" name="clientId" id="id_clientId" value="{{form.clientId.value}}" size="4" type="text"></td>
+						<td><input class="form-control" name="orderId" id="id_orderId" value="{{form.orderId.value}}" size="5" type="text"></td>
+						<td><input class='form-control' name='firstName' id='id_firstName' value="{{form.firstName.value}}" size='10' type="text"></td>
+						<td><input class='form-control' name='telephoneNum1' id='id_telephoneNum1' value="{{form.telephoneNum1.value}}" size='16' type="text"></td>
+						<td><input class='form-control' name='email1' id='id_email1' value="{{form.email1.value}}" size='16' type="text"></td>
+						<td><input class='form-control' name='step_description' id='id_step_description' value="{{form.step_description.value}}" size='16' type="text"></td>
+						<td>						
+							<select class='form-control' name ='status' id='id_status'>
+										<option value='all'>Все</option>
+										<option value="INTS" {% if form.status.value == 'INTS'%}selected{% endif %}>Заинтересованность</option>
+										<option value="EVAL" {% if form.status.value == 'EVAL'%}selected{% endif %}>Оценка</option>
+										<option value="OFER" {% if form.status.value == 'OFER'%}selected{% endif %}>Подготовка предложения</option>
+										<option value="WAIT" {% if form.status.value == 'WAIT'%}selected{% endif %}>Ожидание решения клиента</option>
+										<option value="DVLR" {% if form.status.value == 'DVLR'%}selected{% endif %}>Доставка</option>
+										<option value="PROC" {% if form.status.value == 'PROC'%}selected{% endif %}>Выполнение заказа</option>
+										<option value="DONE" {% if form.status.value == 'DONE'%}selected{% endif %}>Заказ выполнен</option>
+										<option value="FAIL" {% if form.status.value == 'FAIL'%}selected{% endif %}>Отказ</option>
+							</select>
+						</td>
+						<td></td>
+						<td>
+							<select class='form-control' name="manager" id='id_manager'>
+									<option value='all'>Все</option>
+									{% for user in users %}
+										<option value="{{user.username}}" {% if user.username == form.manager.value %}selected{% endif%}>{{user.username}}</option>
+									{% endfor %}
+							</select>
+						</td>
+						<td></td>
+					</tr>
+				    
+					{% for orders in page.object_list %}
+					<tr>
+						<td><a href="{{orders.order.client.get_url}}">{{orders.order.client.id}}</a></td>
+						<td><a href="{{orders.order.get_url}}">{{orders.order.id}}</a></td>
+						<td>{{orders.order.contactPerson.firstName}}</td>
+						<td>{{orders.order.contactPerson.telephoneNum1}}</td>
+						<td>{{orders.order.contactPerson.email1}}</td>
+						<td>{{orders.step_description}}</td>
+						<td>{{orders.order.get_status_display}}</td>
+						<td>{{orders.order.call_on|date:"d.m.Y"}}</td>
+						<td>{{orders.order.manager}}</td>
+						<td>{{orders.date_step|date:"d.m.Y, H:i"}}</td>
+	
+				    </tr>
+					{% endfor %}
+			      </tbody> 
+			 </table>
+			{% csrf_token %}
+		</form>
+	
+			  <ul class="pagination">
+				 {% if left_offset > 1 %}  
+			
+	
+					<li><a href="/orders_list/1/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}">{{pg}}   <<  </a></li>
+	
+				 {% endif %} 
+			
+			     {% for pg in display_range %}    
+			         
+			
+					    {% if pg == page.number %}
+					      <li class="active">
+			     	    {% else %}
+				 	      <li>
+					    {% endif %}
+	
+				           <a href="/orders_list/{{pg}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}">{{pg}}</a>
+	
+				          </li>
+			   
+				 {% endfor %}
+			
+			
+			     
+			     {% if right_offset < paginator.num_pages %}
+	
+				          <li><a href="/orders_list/{{paginator.num_pages}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}">{{pg}}  >> </a></li>
+	
+			     {% endif %} 			  
+			  </ul>     
+	
+	  </div> 
+  {% endblock %}
+</body>	 
+</html>

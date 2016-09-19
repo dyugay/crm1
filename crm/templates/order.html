@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+<html lang="ru">
+
+	<head>
+		{% block head %}
+			{{block.super}}
+		{% endblock %}
+		
+	</head>
+
+
+
+	<body>
+		{% block nav %}
+			{{block.super}}
+		{% endblock %}
+		{% block content %}
+		<div class="container-fluid">
+
+			{% for e in form.non_field_errors %}
+				<div> {{e}} </div>
+			{% endfor  %}
+			
+			<form method="post" id="order">
+				<legend>
+					<div class='form-inline'>
+						<label for='id_orderId'>Заказ:</label>
+						<input class='form-control' name='orderId' id='id_orderId' value='{{form.orderId.value}}' size='10' readonly>
+
+						<label for='id_clientId'> для клиента:</label>
+						<a href="{% url 'client' clientId=form.clientId.value %}"><input class='form-control' name='clientId' id='id_clientId' value='{{form.clientId.value}}' size='10' readonly></a>
+					</div>
+				</legend>
+				
+				
+				<div class='row'>
+					<div class='form-group col-sm-2'>
+						<label for='id_status'>{{form.status.label}}</label>
+						<select class='form-control' name ='status' id='id_status'>
+									<option value="INTS" {% if form.status.value == 'INTS'%}selected{% endif %}>Заинтересованность</option>
+									<option value="EVAL" {% if form.status.value == 'EVAL'%}selected{% endif %}>Оценка</option>
+									<option value="OFER" {% if form.status.value == 'OFER'%}selected{% endif %}>Подготовка предложения</option>
+									<option value="WAIT" {% if form.status.value == 'WAIT'%}selected{% endif %}>Ожидание решения клиента</option>
+									<option value="DVLR" {% if form.status.value == 'DVLR'%}selected{% endif %}>Доставка</option>
+									<option value="PROC" {% if form.status.value == 'PROC'%}selected{% endif %}>Выполнение заказа</option>
+									<option value="DONE" {% if form.status.value == 'DONE'%}selected{% endif %}>Заказ выполнен</option>
+									<option value="FAIL" {% if form.status.value == 'FAIL'%}selected{% endif %}>Отказ</option>
+						</select>
+						
+					</div>
+				</div>
+
+
+
+
+
+				 <div class="row">
+					<div class="form-group col-sm-3">
+						<label for='id_contactPersonId'>{{form.contactPersonId.label}}</label>
+						<select class='form-control' name='contactPersonId' id='id_contactPersonId'>
+							{% for person in persons %}
+								<option value="{{person.id}}" {% if person.get_id_str == form.contactPersonId.value %}selected{% endif%}>
+																															{{person.firstName}}
+																								{% if person.telephoneNum1 %}, {{person.telephoneNum1}} {%endif%}
+																										{%if person.email1 %}, {{person.email1}}        {%endif%}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+
+
+
+				
+				<div class='row'>
+					<div class='form-group col-sm-2'>
+						<label for='id_call_or_email'>{{form.call_or_email.label}}</label>
+						<select class='form-control' name ='call_or_email' id='id_call_or_email' {% if form.orderId.value%}disabled{% endif %}>
+							<option value="call" {% if form.call_or_email.value == "call" %}selected{% endif %}>Звонок</option>
+							<option value="email" {% if form.call_or_email.value == "email" %}selected{% endif %}>Заявка</option>
+						</select>
+					</div>
+				</div>
+
+
+
+
+
+				 <div class="row">
+					<div class="form-group col-sm-2">
+						<label for='id_step_description'>{{form.step_description.label}}</label>
+						<textarea class="form-control" rows="6" id="id_step_description" name="step_description" placeholder="Описание шага" >{{form.step_description.value}}</textarea>
+					</div>
+				</div>
+
+				 <div class="row">
+					<div class="form-group col-sm-2">
+						<label for='id_call_on'>{{form.call_on.label}}</label>
+						<input class="form-control" id="id_call_on" name="call_on" value='{{form.call_on.value}}' type="date">
+					</div>
+				</div>
+				
+				
+				<div class='row'>
+					<div class='form-group col-sm-2'>
+						<label for='id_manager'>{{form.manager.label}}</label>
+						<select class='form-control' name="manager" id='id_manager'>
+							{% for user in users %}
+								<option {% if user.username == form.manager.value %}selected{% endif%}>{{user.username}}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<button class="btn btn-primary" type="submit">Сделать шаг</button>
+
+				<p>&nbsp;</p>
+				{% for field in form %}
+					{% if field.errors %}
+						<div class="row">
+							<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+							<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+						</div>
+					{% endif %}
+				{% endfor %}
+			
+			  {% csrf_token %}
+			</form>
+
+
+				<p>&nbsp;</p>
+				{% if order_process %}
+					<div class='row'>	
+						<div class="col-sm-6">
+							<table class="table table-striped table-hover table-bordered table-condensend">
+								<caption>Предыдущие шаги</caption>
+								<thead>
+									<tr>
+										<th>Шаг</th>
+										<th>Дата,время</th>
+										<th>Описание</th>
+										<th>Менеджер</th>
+									</tr>
+								</thead>
+								
+								<tbody>
+							  		{% for order_proc in order_process %}
+									<tr>
+										<td>{{order_proc.step}}</td>	
+										<td>{{order_proc.date_step|date:"d.m.Y, H:i"}}</td> 
+										<td>{{order_proc.step_description}}</td>
+										<td>{{order_proc.manager}}</td>
+									</tr>								
+									{% endfor %} 
+								</tbody>	
+								
+							</table>
+						</div>
+					</div>
+				{% endif %}
+
+	 </div>
+	 {% endblock %}
+	</body>
+
+</html>
