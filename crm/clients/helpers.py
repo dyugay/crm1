@@ -269,7 +269,7 @@ def get_orders(request):
 		and request.GET.get('call_onEnd') != 'None':
 		
 			#make some transformation beacause last date is condering by django as date and 00:00:00 time
-			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d") + timedelta(days=1)
+			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d") #+ timedelta(days=1)
 		
 			orders = orders.filter(order__call_on__range=(request.GET.get('call_onBegin'), call_onEnd))
 
