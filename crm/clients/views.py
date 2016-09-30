@@ -14,6 +14,7 @@ from clients.helpers import get_order_related_data, paginate, initOrderFilterFor
 from clients.helpers import initClientsByPersonsFormData
 from clients.helpers import get_client_data, get_that_clientId_url, get_orders, get_clients_by_persons_search_criteria
 from clients.helpers import get_clients_by_LK_search_criteria, get_clients_by_legal_details_search_criteria, initClientsByLegalDetailsFormData
+from clients.helpers import get_status_numbers
 from django.contrib.auth.models import User
 
 # main page
@@ -154,20 +155,15 @@ def get_orders_list(request, *args, **kwargs):
 			return HttpResponseRedirect(url)
 		else:
 			return render(
-			   request,
-			   'orders_list.html',
-			   {
-			   #'paginator': paginatorAttr.get('paginator'),
-			   #'page': paginatorAttr.get('page'),
-			   #'right_offset': paginatorAttr.get('right_offset'),
-			   #'left_offset': paginatorAttr.get('left_offset'),
-			   #'display_range': paginatorAttr.get('display_range'),
-			   'form': form,
-			   #'users': users,
+				request,
+				'orders_list.html',
+				{
+					'form': form,
 				}
-				 )
+				)
 	else:
 		orders_list = get_orders(request)
+		status_numbers = get_status_numbers(orders_list)
 		paginatorAttr = paginate(request, orders_list, kwargs.get('pageNum'))
 		users = User.objects.all()
 		initial_data = initOrderFilterFormData(request)
@@ -178,12 +174,20 @@ def get_orders_list(request, *args, **kwargs):
 					   request,
 					   'orders_list.html',
 					   {'paginator': paginatorAttr.get('paginator'),
-					   'page': paginatorAttr.get('page'),
-					   'right_offset': paginatorAttr.get('right_offset'),
-					   'left_offset': paginatorAttr.get('left_offset'),
-					   'display_range': paginatorAttr.get('display_range'),
-					   'form': form,
-					   'users': users,
+						'page': paginatorAttr.get('page'),
+						'right_offset': paginatorAttr.get('right_offset'),
+						'left_offset': paginatorAttr.get('left_offset'),
+						'display_range': paginatorAttr.get('display_range'),
+						'form': form,
+						'users': users,
+						'ints_number': status_numbers.get('INTS'),
+						'eval_number': status_numbers.get('EVAL'),
+						'ofer_number': status_numbers.get('OFER'),
+						'wait_number': status_numbers.get('WAIT'),
+						'dvlr_number': status_numbers.get('DVLR'),
+						'proc_number': status_numbers.get('PROC'),
+						'done_number': status_numbers.get('DONE'),
+						'fail_number': status_numbers.get('FAIL'),
 						}
 						 )
 

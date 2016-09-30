@@ -269,7 +269,7 @@ def get_orders(request):
 		and request.GET.get('call_onEnd') != 'None':
 		
 			
-			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d") #+ timedelta(days=1)
+			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d")
 		
 			orders = orders.filter(order__call_on__range=(request.GET.get('call_onBegin'), call_onEnd))
 
@@ -277,6 +277,8 @@ def get_orders(request):
 
 
 	return orders
+	
+
 
 
 
@@ -650,3 +652,55 @@ def get_clients_by_legal_details_search_criteria(request):
 															#)
 			#print lk.client.id
 	#return clients_list
+	
+	
+	
+def get_status_numbers(orders):
+	
+	count = orders.filter(order__status='INTS').count()
+	if not count:
+		count = 0
+	status_numbers = {'INTS':count}
+
+
+	count = orders.filter(order__status='EVAL').count()
+	if not count:
+		count = 0
+	status_numbers.update({'EVAL':count})
+
+
+	
+	count = orders.filter(order__status='OFER').count()
+	if not count:
+		count = 0
+	status_numbers.update({'OFER':count})
+
+	
+	count = orders.filter(order__status='WAIT').count()
+	if not count:
+		count = 0
+	status_numbers.update({'WAIT':count})
+
+	
+	count = orders.filter(order__status='DVLR').count()
+	if not count:
+		count = 0
+	status_numbers.update({'DVLR':count})
+	
+
+	count = orders.filter(order__status='PROC').count()
+	if not count:
+		count = 0
+	status_numbers.update({'PROC':count})
+	
+	count = orders.filter(order__status='DONE').count()
+	if not count:
+		count = 0
+	status_numbers.update({'DONE':count})
+	
+	count = orders.filter(order__status='FAIL').count()
+	if not count:
+		count = 0
+	status_numbers.update({'FAIL':count})
+	
+	return status_numbers

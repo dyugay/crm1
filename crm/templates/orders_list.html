@@ -58,9 +58,8 @@
 			</div>
 			
 			<button class="btn btn-primary" type="submit">Применить фильтр</button>
-	<!--
-			<p>&nbsp;</p>
-	-->
+
+
 			{% for field in form %}
 				{% if field.errors %}
 					<div class="row">
@@ -69,11 +68,19 @@
 					</div>
 				{% endif %}
 			{% endfor %}
-	
 			
-	
+			<p>&nbsp;</p>
+			
+			<div class='row'>
+					<div class='col-sm-12'>
+						<strong>Заказы (всего: {{paginator.count}}, в т.ч. заинтересованность {{ints_number}}, на оценке {{eval_number}}, подготовка предложения {{ofer_number}},
+							в ожидании {{wait_number}}, доставка {{dvlr_number}}, на исполнении {{proc_number}}, выполнено {{done_number}}, отказов {{fail_number}})
+						</strong>
+					</div>
+			</div>
+			
 			<table class="table table-striped table-hover table-bordered table-condensend">
-				 <caption><strong>Заказы (всего: {{paginator.count}})</strong></caption>
+				 <caption></caption>
 	
 				 <thead>
 				 <tr>
