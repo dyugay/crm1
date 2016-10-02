@@ -85,8 +85,8 @@ def order(request, *args, **kwargs):
 	  
 	else:
 
-		#manager field initialization
-		initial_data['manager'] = request.user.username
+		##manager field initialization
+		#initial_data['manager'] = request.user.username
 		form = orderForm(initial = initial_data)
 
 
