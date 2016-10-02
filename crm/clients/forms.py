@@ -563,13 +563,14 @@ class createClientForm(forms.Form):
 										manager = manager, 
 										)      
 		order_process.save()
-
-		legal_details = Legal_details(
-								client = client,
-								city = self.cleaned_data.get('city'),
-								author = user,
-									)
-		legal_details.save()
+		
+		if self.cleaned_data.get('city'):
+			legal_details = Legal_details(
+									client = client,
+									city = self.cleaned_data.get('city'),
+									author = user,
+										)
+			legal_details.save()
 		
 		return client
 
