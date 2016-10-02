@@ -115,28 +115,27 @@
 			
 			<strong>Реквизиты:</strong> 
 				{% for details in legal_details %}
-					<a href="{% url 'changeLegalDetails' legal_details_id=details.id %}"> 
-
-						{{details.city}}
-						
-						{% if details.address %}
-						, {{details.address}}
-						{% endif%}
-						
-						{% if details.company_name %}
-						, {{details.company_name}}
-						{% endif %}
-					</a>
+					<ul>
+						<li>
+							<a href="{% url 'changeLegalDetails' legal_details_id=details.id %}"> 
+		
+								{{details.city}}
+								
+								{% if details.address %}
+								, {{details.address}}
+								{% endif%}
+								
+								{% if details.company_name %}
+								, {{details.company_name}}
+								{% endif %}
+							</a>
+						</li>
+					</ul>
 				{% endfor %}
 				
 				
-<!--
-				{% if legal_details != '' %}
--->
+
 					<div class='row'><div class="col-sm-2"><a href="{% url 'addLegalDetails' clientId=client.id%}" class='btn btn-primary btn-block' role='button'>Добавить реквизиты</a></div></div>
-<!--
-				{% endif %}
--->
 				
 				<p>&nbsp;</p>
 
