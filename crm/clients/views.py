@@ -165,7 +165,7 @@ def get_orders_list(request, *args, **kwargs):
 				)
 	else:
 		orders_list = get_orders(request)
-		status_numbers = get_status_numbers(orders_list)
+		status_numbers = get_status_numbers(request)
 		paginatorAttr = paginate(request, orders_list, kwargs.get('pageNum'))
 		users = User.objects.all()
 		initial_data = initOrderFilterFormData(request)
