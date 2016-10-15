@@ -656,8 +656,89 @@ def get_clients_by_legal_details_search_criteria(request):
 	
 	
 	
-def get_status_numbers(orders):
+def get_status_numbers(request):
 	
+	orders = Order_process.objects.filter(step=1)
+
+
+	#search string for client id
+	if request.GET.get('clientId'):
+		search_clientId_str = request.GET.get('clientId')
+		search_clientId_str = replace_special_symbols_str(search_clientId_str)
+		orders = orders.filter(order__client__id__iregex = search_clientId_str) 
+
+
+
+	#searxch string for orderId
+	if request.GET.get('orderId'):
+		search_orderId_str = request.GET.get('orderId')
+		search_orderId_str = replace_special_symbols_str(search_orderId_str)
+		orders = orders.filter(order__id__iregex = search_orderId_str) 
+
+
+
+
+	#search string for firstName
+	if request.GET.get('firstName'):
+		search_firstName_str = request.GET.get('firstName')
+		search_firstName_str = replace_special_symbols_str(search_firstName_str)
+		orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
+
+		
+	#search string for telephoneNum1
+	if request.GET.get('telephoneNum1'):
+		search_telephoneNum1_str = request.GET.get('telephoneNum1')
+		search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
+		orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
+
+
+	#search string for email1
+	if request.GET.get('email1'):
+		search_email1_str = request.GET.get('email1')
+		search_email1_str = replace_special_symbols_str(search_email1_str)
+		orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
+
+
+
+
+
+	#search string for step_description
+	if request.GET.get('step_description'):
+		search_step_description_str = request.GET.get('step_description')
+		search_step_description_str = replace_special_symbols_str(search_step_description_str)
+		orders = orders.filter(step_description__iregex = search_step_description_str)
+		
+
+
+
+	#search string for manager
+	if request.GET.get('manager') != "all" and request.GET.get('manager') != None:
+			orders = orders.filter(order__manager__username = request.GET.get('manager'))
+			
+
+
+	#search for orderDate
+	if request.GET.get('orderDateBegin') \
+		and request.GET.get('orderDateEnd') \
+		and request.GET.get('orderDateBegin') != 'None' \
+		and request.GET.get('orderDateEnd') != 'None':
+		
+			#make some transformation beacause last date is condering by django as date and 00:00:00 time
+			orderDateEnd = datetime.strptime(request.GET.get('orderDateEnd'), "%Y-%m-%d") + timedelta(days=1)
+		
+			orders = orders.filter(date_step__range=(request.GET.get('orderDateBegin'), orderDateEnd))
+
+
+	#search for call_on
+	if request.GET.get('call_onBegin') \
+		and request.GET.get('call_onEnd') \
+		and request.GET.get('call_onBegin') != 'None' \
+		and request.GET.get('call_onEnd') != 'None':
+		
+			
+			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d")
+		
+			orders = orders.filter(order__call_on__range=(request.GET.get('call_onBegin'), call_onEnd))
 	count = orders.filter(order__status='INTS').count()
 	if not count:
 		count = 0
