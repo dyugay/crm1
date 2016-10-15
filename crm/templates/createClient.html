@@ -19,12 +19,24 @@
 		{% block content %}
 			<div class="container-fluid">
 				<form method="post">
+
+					
+					
 					<legend>
 						<div class='form-inline'>
 							Создание клиента
 						</div>
 					</legend>
-					
+
+					{% for field in form %}
+						{% if field.errors %}
+							<div class="row">
+								<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+								<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+							</div>
+						{% endif %}
+					{% endfor %}
+
 					<div class='row'>
 						<div class='form-group col-sm-2'>
 							<label for='id_firstName'>{{form.firstName.label}}</label>
@@ -115,14 +127,7 @@
 				
 				
 					<p>&nbsp;</p>
-					{% for field in form %}
-						{% if field.errors %}
-							<div class="row">
-								<div class='col-sm-2 bg-danger'>{{field.label}}</div>
-								<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
-							</div>
-						{% endif %}
-					{% endfor %}
+
 					
 					<div class='row'>
 						<div class='form-group col-sm-2'>

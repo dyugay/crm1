@@ -16,6 +16,7 @@ from clients.helpers import get_client_data, get_that_clientId_url, get_orders, 
 from clients.helpers import get_clients_by_LK_search_criteria, get_clients_by_legal_details_search_criteria, initClientsByLegalDetailsFormData
 from clients.helpers import get_status_numbers
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 # main page
 @login_required
@@ -81,6 +82,7 @@ def order(request, *args, **kwargs):
 		if form.is_valid():
 			order =  form.save(order = order)
 			url = order.get_url()
+			messages.success(request, 'Шаг создан')
 			return HttpResponseRedirect(url)
 	  
 	else:
@@ -163,7 +165,7 @@ def get_orders_list(request, *args, **kwargs):
 				)
 	else:
 		orders_list = get_orders(request)
-		status_numbers = get_status_numbers(request) #(orders_list)
+		status_numbers = get_status_numbers(orders_list)
 		paginatorAttr = paginate(request, orders_list, kwargs.get('pageNum'))
 		users = User.objects.all()
 		initial_data = initOrderFilterFormData(request)
@@ -207,8 +209,6 @@ def client(request, *args, **kwargs):
 	orders_list = Order.objects.filter(client=client).order_by('-id')
 	users = User.objects.all()
 	
-
-		
 	return render(
 	               request,
 	               'client.html',
@@ -309,6 +309,7 @@ def changePerson(request, *args, **kwargs):
 								currentUser=request.user,
 								person=person)
 			url = person.get_url()
+			messages.success(request, 'Контакты сохранены')
 			return HttpResponseRedirect(url)
 	else:
 		

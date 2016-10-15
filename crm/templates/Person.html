@@ -16,9 +16,7 @@
 		{% block content %}
 		
 	<div class='container-fluid'>
-		{% for e in form.non_field_errors %}
-			<div> {{e}} </div>
-		{% endfor  %}
+
 
 		<form method='post'>
 			<legend>
@@ -27,7 +25,37 @@
 					<a href="{% url 'client' clientId=form.clientId.value %}"><input class='form-control' name='clientId' id='id_clientId' value='{{form.clientId.value}}' size='10' readonly></a>
 				</div>
 			</legend>
+
+
+			{% for e in form.non_field_errors %}
+				<div> {{e}} </div>
+				<p>&nbsp;</p>
+			{% endfor  %}
+	
+			{% for field in form %}
+				{% if field.errors %}
+					<div class="row">
+						<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+						<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+					</div>
+					<p>&nbsp;</p>
+				{% endif %}
+				
+			{% endfor %}
+
+			{% if messages %}
+				<ul class="messages">
+					{% for message in messages %}
+					<div class="row">
+						<div class='col-sm-2 bg-success'><li>{{ message }}</li></div>
+					</div>
+					{% endfor %}
+				</ul>
+			{% endif %}
 			
+			
+			
+
 			<div class='row'>
 				<div class='form-group col-sm-2'>
 					<label for='id_firstName'>{{form.firstName.label}}</label>
@@ -97,14 +125,7 @@
 			
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
-			{% for field in form %}
-				{% if field.errors %}
-					<div class="row">
-						<div class='col-sm-2 bg-danger'>{{field.label}}</div>
-						<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
-					</div>
-				{% endif %}
-			{% endfor %}
+
 
 			{% csrf_token %}
 			<div class="col-sm-1 invisible">
