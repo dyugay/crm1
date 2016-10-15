@@ -163,7 +163,7 @@ def get_orders_list(request, *args, **kwargs):
 				)
 	else:
 		orders_list = get_orders(request)
-		status_numbers = get_status_numbers(request) #(orders_list)
+		status_numbers = get_status_numbers(orders_list)
 		paginatorAttr = paginate(request, orders_list, kwargs.get('pageNum'))
 		users = User.objects.all()
 		initial_data = initOrderFilterFormData(request)
@@ -207,8 +207,6 @@ def client(request, *args, **kwargs):
 	orders_list = Order.objects.filter(client=client).order_by('-id')
 	users = User.objects.all()
 	
-
-		
 	return render(
 	               request,
 	               'client.html',

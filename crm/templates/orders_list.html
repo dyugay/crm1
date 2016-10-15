@@ -8,6 +8,11 @@
 
 	{% block head %}
 		{{block.super}}
+<!--
+	{% load static%}
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}" type='text/css'/>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+-->
 	{% endblock %}
 
 </head>
@@ -18,14 +23,6 @@
 		{{block.super}}
 	{% endblock %}
 	{% block content %}
-	{% for field in form %}
-		{% if field.errors %}
-			<div class="row">
-				<div class='col-sm-2 bg-danger'>{{field.label}}</div>
-				<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
-			</div>
-		{% endif %}
-	{% endfor %}
 	 <div class="container-fluid">
 	
 	 
@@ -45,8 +42,6 @@
 					<label for='id_orderDateEnd'>{{form.orderDateEnd.label}}</label>
 					<input class="form-control" id="id_orderDateEnd" name="orderDateEnd" value='{{form.orderDateEnd.value}}' type="date">
 				</div>
-				
-
 			</div>
 	
 	
@@ -60,58 +55,32 @@
 					<label for='id_call_onEnd'>{{form.call_onEnd.label}}</label>
 					<input class="form-control" id="id_call_onEnd" name="call_onEnd" value='{{form.call_onEnd.value}}' type="date">
 				</div>
-
 			</div>
 			
 			<button class="btn btn-primary" type="submit">Применить фильтр</button>
-			<p>&nbsp;</p>
-			
-			<div class='row'>
-				
-				<div class='form-group col-sm-2'>
-				<strong>
-						<li>Заинтересованность <a href="/orders_list/1/?status=INTS&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{ints_number}}</a></li> 
-						<li>На оценке <a href="/orders_list/1/?status=EVAL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{eval_number}}</a></li>
-						<li>Подготовка предложения <a href="/orders_list/1/?status=OFER&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{ofer_number}}</a></li>
-				</div>
-				
-				<div class='form-group col-sm-2'>
-						<li>В ожидании <a href="/orders_list/1/?status=WAIT&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{wait_number}}</a></li> 
-						<li>Доставка <a href="/orders_list/1/?status=DLVR&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{dvlr_number}}</a></li> 
-						<li>На исполнении <a href="/orders_list/1/?status=PROC&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{proc_number}}</a></li> 
-				</div>
 
-				<div class='form-group col-sm-2'>
-						<li>Выполнено <a href="/orders_list/1/?status=DONE&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{done_number}}</a></li> 
-						<li>Отказов <a href="/orders_list/1/?status=FAIL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{fail_number}}</a></li>
-					
-				</div>
-				</strong>
-			</div>
-<!--
+
+			{% for field in form %}
+				{% if field.errors %}
+					<div class="row">
+						<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+						<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+					</div>
+				{% endif %}
+			{% endfor %}
 			
 			<p>&nbsp;</p>
 			
-
 			<div class='row'>
 					<div class='col-sm-12'>
-						
-						Заинтересованность <a href="/orders_list/1/?status=INTS&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{ints_number}}</a>, 
-						на оценке <a href="/orders_list/1/?status=EVAL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{eval_number}}</a>, 
-						подготовка предложения <a href="/orders_list/1/?status=OFER&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{ofer_number}} </a>,
-						в ожидании <a href="/orders_list/1/?status=WAIT&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{wait_number}}</a>, 
-						доставка <a href="/orders_list/1/?status=DLVR&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{dvlr_number}}</a>, 
-						на исполнении <a href="/orders_list/1/?status=PROC&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{proc_number}}</a>, 
-						выполнено <a href="/orders_list/1/?status=DONE&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{done_number}}</a>, 
-						отказов <a href="/orders_list/1/?status=FAIL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}"> {{fail_number}}</a>.
+						<strong>Заказы (всего: {{paginator.count}}, в т.ч. заинтересованность {{ints_number}}, на оценке {{eval_number}}, подготовка предложения {{ofer_number}},
+							в ожидании {{wait_number}}, доставка {{dvlr_number}}, на исполнении {{proc_number}}, выполнено {{done_number}}, отказов {{fail_number}})
 						</strong>
-
 					</div>
 			</div>
--->
 			
 			<table class="table table-striped table-hover table-bordered table-condensend">
-				 <caption><strong>Заказы (выбрано: {{paginator.count}}).</strong></caption>
+				 <caption></caption>
 	
 				 <thead>
 				 <tr>
