@@ -841,7 +841,6 @@ def get_status_numbers(**kwargs):
 	
 def get_week_analytics():
 	day = datetime.today()
-	day = day-timedelta(days=30)
 	struct_datetime = day.timetuple()
 	count = Order_process.objects.filter(date_step__day=struct_datetime[2], date_step__month=struct_datetime[1], date_step__year=struct_datetime[0], step=1).count()
 	#week_analytics = {day.date():count}
