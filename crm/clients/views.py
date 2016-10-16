@@ -14,7 +14,7 @@ from clients.helpers import get_order_related_data, paginate, initOrderFilterFor
 from clients.helpers import initClientsByPersonsFormData
 from clients.helpers import get_client_data, get_that_clientId_url, get_orders, get_clients_by_persons_search_criteria
 from clients.helpers import get_clients_by_LK_search_criteria, get_clients_by_legal_details_search_criteria, initClientsByLegalDetailsFormData
-from clients.helpers import get_status_numbers
+from clients.helpers import get_status_numbers, get_week_analytics
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -24,6 +24,9 @@ def main(request, *args, **kwargs):
 	status_numbers = get_status_numbers()
 	conversion_rate = round(float(status_numbers.get('DONE'))/float(status_numbers.get('total_number')), 3) * 100
 	conversion_rate = str(conversion_rate) + "%"
+
+	week_analytics = get_week_analytics();
+	#week_analytics = sorted(week_analytics)
 	return render(request,
 					'main.html',
 					{
@@ -37,8 +40,10 @@ def main(request, *args, **kwargs):
 					'fail_number': status_numbers.get('FAIL'),
 					'total_number': status_numbers.get('total_number'),
 					'conversion_rate': conversion_rate,
+					'week_analytics': week_analytics,
 					}
 						) 
+
 
 
 

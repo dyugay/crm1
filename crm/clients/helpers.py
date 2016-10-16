@@ -643,6 +643,7 @@ def get_clients_by_legal_details_search_criteria(request):
 	
 def get_status_numbers(**kwargs):
 	request = kwargs.get('request')
+	
 	if not request:
 		orders = Order.objects.all()
 	
@@ -836,3 +837,31 @@ def get_status_numbers(**kwargs):
 	status_numbers.update({'total_number': total_number})
 	
 	return status_numbers
+	
+	
+def get_week_analytics():
+	day = datetime.today()
+	day = day-timedelta(days=30)
+	struct_datetime = day.timetuple()
+	count = Order_process.objects.filter(date_step__day=struct_datetime[2], date_step__month=struct_datetime[1], date_step__year=struct_datetime[0], step=1).count()
+	#week_analytics = {day.date():count}
+	week_analytics_l = [(day.date(), count)]
+	
+	
+	for i in range(6):
+		day = day-timedelta(days=1)
+		struct_datetime = day.timetuple()
+		count = Order_process.objects.filter(date_step__day=struct_datetime[2], date_step__month=struct_datetime[1], date_step__year=struct_datetime[0], step=1).count()
+		#week_analytics.update({day.date():count})
+		week_analytics_l.append((day.date(), count))
+	
+
+	#for date, numbers in sorted(week_analytics.items()):
+	#	print date, " ", numbers
+	
+	#for date, val in week_analytics_l:
+		#print date, val
+
+	
+	#return week_analytics
+	return week_analytics_l

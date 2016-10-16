@@ -60,19 +60,76 @@
 					<p class="bg-primary text-center">Количество заказов: <strong>{{total_number}}</strong></p>
 					<p class="bg-danger text-center">Конверсия заказов: <strong>{{conversion_rate}}</strong></p>
 				</div>
+				
+
+				
+
 		
 				<div class="col-sm-2">
-					<strong>Воронка продаж</strong>
-					<li>Заинтересованность: {{ints_number}}</li>
-					<li>Оценка: {{eval_number}}</li>
-					<li>Подготовка предложения: {{ofer_number}}</li>
-					<li>В ожидании: {{wait_number}}</li>
-					<li>Выполняются: {{proc_number}}</li>
-					<li>Доставка: {{dvlr_number}}</li>
-					<li>Выполнено: {{done_number}}</li>
-					<li>Отказы: {{fail_number}}</li>
+					<p class="bg-primary text-center">Воронка продаж</p>
+					<table class="table table-condensed table-hover table-striped">
+						
+						<tr>
+							<td>Заинтересованность</td> 
+							<td class="text-right"><strong><a href="/orders_list/1/?status=INTS">{{ints_number}}</a></strong></td>
+						</tr>
+						
+						<tr>
+							<td>Оценка</td>
+							<td class="text-right"><strong><a href="/orders_list/1/?status=EVAL">{{eval_number}}</a></strong></td>
+						</tr>
+						
+						<tr class="warning">
+							<td>Подготовка предложения</td>
+							<td class="text-right"><strong><a href="/orders_list/1/?status=OFER">{{ofer_number}}</a></strong></td>
+						</tr>
+						
+						<tr>
+							<td>В ожидании</td>
+							<td class="text-right"><strong><a href="/orders_list/1/?status=WAIT">{{wait_number}}</a></strong></td>
+						</tr>
+						
+						<tr class="warning">
+							<td>Выполняются</td>
+							<td class="text-right"><strong><a href="/orders_list/1/?status=PROC">{{proc_number}}</a></strong></td>
+						</tr>
+						
+						<tr>
+							<td>Доставка</td> 
+							<td class="text-right"><strong><a href="/orders_list/1/?status=DVLR">{{dvlr_number}}</a></strong></td>
+						</tr>
+						
+						<tr class="success">
+							<td >Выполнено</td>
+							<td class="text-right"><strong><a href="/orders_list/1/?status=DONE">{{done_number}}</a></strong></td>
+						</tr>
+						
+						<tr class="danger">
+							<td >Отказы</td>
+							<td class="text-right"><strong><a href="/orders_list/1/?status=FAIL">{{fail_number}}</a></strong></td>
+						</tr>
+					</table>
 				</div>
-
+				
+				<div class="col-sm-2">
+					<table class="table table-condensed table-hover table-striped">
+						<p class="bg-primary text-center">Заказы за последние 7 дней</p>
+						<thead>
+							<tr>
+								<th>Дата</th>
+								<th class="text-right">Заказы</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for date, number in week_analytics %}
+							<tr>
+								<td>{{date|date:"d.m.Y"}}</td>
+								<td class="text-right"><strong><a href="/orders_list/1/?orderDateEnd={{date}}&orderDateBegin={{date}}">{{number}}</a></strong></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 
 		
 				
