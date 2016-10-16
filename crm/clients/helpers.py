@@ -639,150 +639,200 @@ def get_clients_by_legal_details_search_criteria(request):
 
 
 
-#def get_LKs_based_on_filter(search_LK_str, clients_list_):
-	#LKs = LK.objects.filter(LK__iregex = search_LK_str)
-	
-	#clients_list = []
-	#if LKs:
-		#for lk in LKs:
-			#clients_list.append(
-									
-									#(lk.client.id,
-									#lk.client.addedAt)
-														
-															#)
-			#print lk.client.id
-	#return clients_list
 	
 	
+def get_status_numbers(**kwargs):
+	request = kwargs.get('request')
+	if not request:
+		orders = Order.objects.all()
 	
-def get_status_numbers(request):
+		count = orders.filter(status='INTS').count()
+		if not count:
+			count = 0
+		status_numbers = {'INTS':count}
 	
-	orders = Order_process.objects.filter(step=1)
-
-
-	#search string for client id
-	if request.GET.get('clientId'):
-		search_clientId_str = request.GET.get('clientId')
-		search_clientId_str = replace_special_symbols_str(search_clientId_str)
-		orders = orders.filter(order__client__id__iregex = search_clientId_str) 
-
-
-
-	#searxch string for orderId
-	if request.GET.get('orderId'):
-		search_orderId_str = request.GET.get('orderId')
-		search_orderId_str = replace_special_symbols_str(search_orderId_str)
-		orders = orders.filter(order__id__iregex = search_orderId_str) 
-
-
-
-
-	#search string for firstName
-	if request.GET.get('firstName'):
-		search_firstName_str = request.GET.get('firstName')
-		search_firstName_str = replace_special_symbols_str(search_firstName_str)
-		orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
-
+	
+		count = orders.filter(status='EVAL').count()
+		if not count:
+			count = 0
+		status_numbers.update({'EVAL':count})
+	
+	
 		
-	#search string for telephoneNum1
-	if request.GET.get('telephoneNum1'):
-		search_telephoneNum1_str = request.GET.get('telephoneNum1')
-		search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
-		orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
-
-
-	#search string for email1
-	if request.GET.get('email1'):
-		search_email1_str = request.GET.get('email1')
-		search_email1_str = replace_special_symbols_str(search_email1_str)
-		orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
-
-
-
-
-
-	#search string for step_description
-	if request.GET.get('step_description'):
-		search_step_description_str = request.GET.get('step_description')
-		search_step_description_str = replace_special_symbols_str(search_step_description_str)
-		orders = orders.filter(step_description__iregex = search_step_description_str)
+		count = orders.filter(status='OFER').count()
+		if not count:
+			count = 0
+		status_numbers.update({'OFER':count})
+	
 		
-
-
-
-	#search string for manager
-	if request.GET.get('manager') != "all" and request.GET.get('manager') != None:
-			orders = orders.filter(order__manager__username = request.GET.get('manager'))
+		count = orders.filter(status='WAIT').count()
+		if not count:
+			count = 0
+		status_numbers.update({'WAIT':count})
+	
+		
+		count = orders.filter(status='DVLR').count()
+		if not count:
+			count = 0
+		status_numbers.update({'DVLR':count})
+		
+	
+		count = orders.filter(status='PROC').count()
+		if not count:
+			count = 0
+		status_numbers.update({'PROC':count})
+		
+		count = orders.filter(status='DONE').count()
+		if not count:
+			count = 0
+		status_numbers.update({'DONE':count})
+		
+		count = orders.filter(status='FAIL').count()
+		if not count:
+			count = 0
+		status_numbers.update({'FAIL':count})
+	
+	else:
+		orders = Order_process.objects.filter(step=1)
+	
+	
+		#search string for client id
+		if request.GET.get('clientId'):
+			search_clientId_str = request.GET.get('clientId')
+			search_clientId_str = replace_special_symbols_str(search_clientId_str)
+			orders = orders.filter(order__client__id__iregex = search_clientId_str) 
+	
+	
+	
+		#searxch string for orderId
+		if request.GET.get('orderId'):
+			search_orderId_str = request.GET.get('orderId')
+			search_orderId_str = replace_special_symbols_str(search_orderId_str)
+			orders = orders.filter(order__id__iregex = search_orderId_str) 
+	
+	
+	
+	
+		#search string for firstName
+		if request.GET.get('firstName'):
+			search_firstName_str = request.GET.get('firstName')
+			search_firstName_str = replace_special_symbols_str(search_firstName_str)
+			orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
+	
+			
+		#search string for telephoneNum1
+		if request.GET.get('telephoneNum1'):
+			search_telephoneNum1_str = request.GET.get('telephoneNum1')
+			search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
+			orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
+	
+	
+		#search string for email1
+		if request.GET.get('email1'):
+			search_email1_str = request.GET.get('email1')
+			search_email1_str = replace_special_symbols_str(search_email1_str)
+			orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
+	
+	
+	
+	
+	
+		#search string for step_description
+		if request.GET.get('step_description'):
+			search_step_description_str = request.GET.get('step_description')
+			search_step_description_str = replace_special_symbols_str(search_step_description_str)
+			orders = orders.filter(step_description__iregex = search_step_description_str)
+			
+	
+	
+	
+		#search string for manager
+		if request.GET.get('manager') != "all" and request.GET.get('manager') != None:
+				orders = orders.filter(order__manager__username = request.GET.get('manager'))
+				
+	
+	
+		#search for orderDate
+		if request.GET.get('orderDateBegin') \
+			and request.GET.get('orderDateEnd') \
+			and request.GET.get('orderDateBegin') != 'None' \
+			and request.GET.get('orderDateEnd') != 'None':
+			
+				#make some transformation beacause last date is condering by django as date and 00:00:00 time
+				orderDateEnd = datetime.strptime(request.GET.get('orderDateEnd'), "%Y-%m-%d") + timedelta(days=1)
+			
+				orders = orders.filter(date_step__range=(request.GET.get('orderDateBegin'), orderDateEnd))
+	
+	
+		#search for call_on
+		if request.GET.get('call_onBegin') \
+			and request.GET.get('call_onEnd') \
+			and request.GET.get('call_onBegin') != 'None' \
+			and request.GET.get('call_onEnd') != 'None':
+			
+				
+				call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d")
+			
+				orders = orders.filter(order__call_on__range=(request.GET.get('call_onBegin'), call_onEnd))
+			
 			
 
-
-	#search for orderDate
-	if request.GET.get('orderDateBegin') \
-		and request.GET.get('orderDateEnd') \
-		and request.GET.get('orderDateBegin') != 'None' \
-		and request.GET.get('orderDateEnd') != 'None':
+		count = orders.filter(order__status='INTS').count()
+		if not count:
+			count = 0
+		status_numbers = {'INTS':count}
+	
+	
+		count = orders.filter(order__status='EVAL').count()
+		if not count:
+			count = 0
+		status_numbers.update({'EVAL':count})
+	
+	
 		
-			#make some transformation beacause last date is condering by django as date and 00:00:00 time
-			orderDateEnd = datetime.strptime(request.GET.get('orderDateEnd'), "%Y-%m-%d") + timedelta(days=1)
+		count = orders.filter(order__status='OFER').count()
+		if not count:
+			count = 0
+		status_numbers.update({'OFER':count})
+	
 		
-			orders = orders.filter(date_step__range=(request.GET.get('orderDateBegin'), orderDateEnd))
-
-
-	#search for call_on
-	if request.GET.get('call_onBegin') \
-		and request.GET.get('call_onEnd') \
-		and request.GET.get('call_onBegin') != 'None' \
-		and request.GET.get('call_onEnd') != 'None':
+		count = orders.filter(order__status='WAIT').count()
+		if not count:
+			count = 0
+		status_numbers.update({'WAIT':count})
+	
 		
-			
-			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d")
+		count = orders.filter(order__status='DVLR').count()
+		if not count:
+			count = 0
+		status_numbers.update({'DVLR':count})
 		
-			orders = orders.filter(order__call_on__range=(request.GET.get('call_onBegin'), call_onEnd))
-	count = orders.filter(order__status='INTS').count()
-	if not count:
-		count = 0
-	status_numbers = {'INTS':count}
-
-
-	count = orders.filter(order__status='EVAL').count()
-	if not count:
-		count = 0
-	status_numbers.update({'EVAL':count})
-
-
 	
-	count = orders.filter(order__status='OFER').count()
-	if not count:
-		count = 0
-	status_numbers.update({'OFER':count})
-
+		count = orders.filter(order__status='PROC').count()
+		if not count:
+			count = 0
+		status_numbers.update({'PROC':count})
+		
+		count = orders.filter(order__status='DONE').count()
+		if not count:
+			count = 0
+		status_numbers.update({'DONE':count})
+		
+		count = orders.filter(order__status='FAIL').count()
+		if not count:
+			count = 0
+		status_numbers.update({'FAIL':count})
 	
-	count = orders.filter(order__status='WAIT').count()
-	if not count:
-		count = 0
-	status_numbers.update({'WAIT':count})
-
 	
-	count = orders.filter(order__status='DVLR').count()
-	if not count:
-		count = 0
-	status_numbers.update({'DVLR':count})
-	
-
-	count = orders.filter(order__status='PROC').count()
-	if not count:
-		count = 0
-	status_numbers.update({'PROC':count})
-	
-	count = orders.filter(order__status='DONE').count()
-	if not count:
-		count = 0
-	status_numbers.update({'DONE':count})
-	
-	count = orders.filter(order__status='FAIL').count()
-	if not count:
-		count = 0
-	status_numbers.update({'FAIL':count})
+	total_number = ( status_numbers.get('INTS') \
+					+ status_numbers.get('EVAL') \
+					+ status_numbers.get('OFER') \
+					+ status_numbers.get('WAIT') \
+					+ status_numbers.get('DVLR') \
+					+ status_numbers.get('PROC') \
+					+ status_numbers.get('DONE') \
+					+ status_numbers.get('FAIL') \
+					)
+	status_numbers.update({'total_number': total_number})
 	
 	return status_numbers

@@ -21,13 +21,25 @@ from django.contrib import messages
 # main page
 @login_required
 def main(request, *args, **kwargs):
- #if request.user.is_authenticated():
+	status_numbers = get_status_numbers()
+	conversion_rate = round(float(status_numbers.get('DONE'))/float(status_numbers.get('total_number')), 3) * 100
+	conversion_rate = str(conversion_rate) + "%"
 	return render(request,
-				 'main.html',
-				 ) 
-				 
- #else:
-  #return HttpResponse('you are not authorized')
+					'main.html',
+					{
+					'ints_number': status_numbers.get('INTS'),
+					'eval_number': status_numbers.get('EVAL'),
+					'ofer_number': status_numbers.get('OFER'),
+					'wait_number': status_numbers.get('WAIT'),
+					'dvlr_number': status_numbers.get('DVLR'),
+					'proc_number': status_numbers.get('PROC'),
+					'done_number': status_numbers.get('DONE'),
+					'fail_number': status_numbers.get('FAIL'),
+					'total_number': status_numbers.get('total_number'),
+					'conversion_rate': conversion_rate,
+					}
+						) 
+
 
 
 
@@ -165,7 +177,7 @@ def get_orders_list(request, *args, **kwargs):
 				)
 	else:
 		orders_list = get_orders(request)
-		status_numbers = get_status_numbers(request)
+		status_numbers = get_status_numbers(request=request)
 		paginatorAttr = paginate(request, orders_list, kwargs.get('pageNum'))
 		users = User.objects.all()
 		initial_data = initOrderFilterFormData(request)

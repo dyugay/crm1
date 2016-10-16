@@ -55,7 +55,28 @@
 		
 		{% block content %}
 		<div class="container-fluid">
-			<H1>Home</H1>
+			<div class='row'>
+				<div class='col-sm-2'>
+					<p class="bg-primary text-center">Количество заказов: <strong>{{total_number}}</strong></p>
+					<p class="bg-danger text-center">Конверсия заказов: <strong>{{conversion_rate}}</strong></p>
+				</div>
+		
+				<div class="col-sm-2">
+					<strong>Воронка продаж</strong>
+					<li>Заинтересованность: {{ints_number}}</li>
+					<li>Оценка: {{eval_number}}</li>
+					<li>Подготовка предложения: {{ofer_number}}</li>
+					<li>В ожидании: {{wait_number}}</li>
+					<li>Выполняются: {{proc_number}}</li>
+					<li>Доставка: {{dvlr_number}}</li>
+					<li>Выполнено: {{done_number}}</li>
+					<li>Отказы: {{fail_number}}</li>
+				</div>
+
+
+		
+				
+			</div>
 		</div>
 		{% endblock %}
 	</body>
