@@ -27,7 +27,6 @@ class ClientContactDetails(models.Model):
   firstName = models.CharField(max_length = 20)
   lastName = models.CharField(max_length = 40)
   middleName = models.CharField(max_length = 40)
-  #focalPoint = models.CharField(max_length = 1, null = True)
   author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
   addedAt = models.DateField(auto_now_add = True)
 
@@ -40,10 +39,6 @@ class Legal_details(models.Model):
 	author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
 	changedOn = models.DateField(auto_now = True, null=True)
 
-  #BIN =  models.CharField(max_length = 12)
-  #bank_account = models.CharField(max_length = 25)
-  #bank = models.CharField(max_length = 20)
-  #personal_ID = models.CharField(max_length=12)
 
 
 class LK(models.Model):
@@ -64,7 +59,6 @@ class Persons(models.Model):
 	telephoneNum3 = models.CharField(max_length = 16, default='')
 	email1 = models.EmailField(default='')
 	email2 = models.EmailField(default='')
-	#focalPoint = models.BooleanField(default=False)
 	author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
 	changedOn = models.DateField(auto_now = True)
 
@@ -75,8 +69,7 @@ class Persons(models.Model):
 	def get_id_str(self):
 		return str(self.id)
  
-#class Order_status(models.Model):
-#  status = models.CharField(max_length = 20)
+
 
 class Order(models.Model):
 	status_choice = (
@@ -100,6 +93,8 @@ class Order(models.Model):
 	call_on = models.DateField(blank = True)
 	contactPerson = models.ForeignKey(Persons, null=True)
 	manager = models.ForeignKey(User, on_delete = models.DO_NOTHING, null=True)
+	author = models.ForeignKey(User, on_delete = models.DO_NOTHING, null=True, related_name = "author")
+	changedOn = models.DateField(auto_now = True, null=True)
 
 	def get_url(self):
 		return reverse('order',
@@ -166,35 +161,7 @@ class Order_process(models.Model):
   date_step = models.DateTimeField(auto_now_add = True)
   manager = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
 
-#class Billing(models.Model):
-  #account = models.ForeignKey(Account, null = True, on_delete = models.DO_NOTHING)
-  #month = models.CharField(max_length = 2)
-  #year = models.CharField(max_length = 4)
-  #summ = models.DecimalField(max_digits = 8, decimal_places = 2)
-  #author =  models.F	oreignKey(User, null = True, on_delete = models.DO_NOTHING)
-  #addedAt = models.DateTimeField(auto_now_add = True)
 
- 
-
-
-#def get_order_related_data(order):
-# create order data  
-#  order_related_data = {'orderId': order.id,
-#                        'clientId':order.clientId.id, 
-#                        'call_or_email': order.call_or_email,
-#                        'status': order.status,
-#                        'call_on': order.call_on,
-#                        }
-
-# create client contact details
-#  client_contact_details = ClientDontactDetails.objects.get(ClientContactDetails=) 
-  
-
-# create order_process data
-#  order_process = Order_process.objects.filter(order=order)  
-   
-  
-#  return order_related_data
 
 
 

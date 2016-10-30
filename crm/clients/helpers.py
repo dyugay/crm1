@@ -22,6 +22,8 @@ def get_order_related_data(order):
 						'call_on': order.call_on,
 						'contactPersonId': contactPersonId, #str(order.contactPerson.id),
 						'manager': order.manager.username,
+						'changedOn': order.changedOn,
+						'author': order.author,
 						}
 
 	

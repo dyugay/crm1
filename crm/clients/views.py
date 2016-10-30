@@ -92,21 +92,23 @@ def order(request, *args, **kwargs):
 
 	#initialization form
 	initial_data = get_order_related_data(order)
+	#initial_data['author'] = request.user
+
+
 
  
 	if request.method == 'POST':
 		form = orderForm(request.POST)
 		if form.is_valid():
-			order =  form.save(order = order)
+			order =  form.save(order = order, author = request.user.username)
 			url = order.get_url()
 			messages.success(request, 'Шаг создан')
 			return HttpResponseRedirect(url)
 	  
 	else:
 
-		##manager field initialization
-		#initial_data['manager'] = request.user.username
-		form = orderForm(initial = initial_data)
+		
+				form = orderForm(initial = initial_data)
 
 
 	return render(request,

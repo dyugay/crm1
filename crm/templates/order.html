@@ -135,7 +135,19 @@
 					</div>
 				</div>
 
-
+				<div class='row'>
+					<div class='form-group col-sm-2'>
+						<label for='id_author'>{{form.author.label}}</label>
+						<input class='form-control' name='author' id='id_author'  type='text' value='{{form.author.value}}' readonly>
+					</div>
+					
+					<div class='form-group col-sm-2'>
+						<label for='id_changedOn'>{{form.changedOn.label}}</label>		 
+						<input class='form-control' name='changedOn' id='id_changedOn' value='{{form.changedOn.value}}' type='date' readonly>
+					</div>
+					
+				</div>
+			
 				<button class="btn btn-primary" type="submit">Сделать шаг</button>
 
 

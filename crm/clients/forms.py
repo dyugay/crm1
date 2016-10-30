@@ -69,6 +69,9 @@ class orderForm(forms.Form):
 	#focalPointId = forms.IntegerField(label='Контактное лицо', error_messages=my_default_errors)
 	manager = forms.CharField(max_length = 20, label="Менеджер заказа", error_messages=my_default_errors)
 	contactPersonId = forms.IntegerField(label="Контактное лицо", error_messages=my_default_errors)
+	author = forms.CharField(max_length = 20, label='Автор записи')
+	changedOn = forms.DateField(label='Дата изменений', error_messages=my_default_errors, required=False)
+	
 
 	
 	
@@ -76,6 +79,11 @@ class orderForm(forms.Form):
 	def save(self, **kwargs):
 
 		manager = User.objects.get(username = self.cleaned_data.get('manager')) 
+		
+		author = kwargs.get("author")
+		author = get_object_or_404(User, username = author) 
+
+
 
 		#save order data
 		order = kwargs.get('order')
@@ -83,9 +91,10 @@ class orderForm(forms.Form):
 		order.status = self.cleaned_data.get('status')
 		order.call_on = self.cleaned_data.get('call_on')
 		order.manager = manager
+		order.author = author
 		order.contactPerson = Persons.objects.get(id = self.cleaned_data.get('contactPersonId'))
 		order.save()
-     
+
 
 
 		#get the last step of the order and incrementing the step
@@ -120,38 +129,6 @@ class loginForm(forms.Form):
     return cleaned_data 
 
 
-#  def clean_username(self):
- #   username = self.cleaned_data['username']
-   
-  #  if is_empty(username):
-   #   raise forms.ValidationError("Введите имя пользователя")
-   
-   # return username     
-
-
-
-#def is_empty(text):
-#  return(text.isspace())
-
-#class clientForm(forms.Form):
-	#clientId = forms.CharField(max_length = 10)
-	#manager = forms.CharField(max_length = 20, label='Менеджер', error_messages=my_default_errors)
-	#author = forms.CharField(max_length = 20)
-	#addedAt = forms.DateField()
-	#city = forms.CharField(max_length = 20, required=False)
-	#company_name = forms.CharField(max_length = 40, required=False)
-
-
-
-
-	#def save(self, **kwargs):
-
-		##client = kwargs.get('client')
-		##client.manager = User.objects.get(username = self.cleaned_data.get('manager'))
-		###print self.cleaned_data.get('manager')
-		##client.save()
-
-		#return client	
 
 
 class createPersonForm(forms.Form):
@@ -552,6 +529,7 @@ class createClientForm(forms.Form):
 						call_or_email = self.cleaned_data.get('call_or_email'),
 						manager = manager,
 						contactPerson = person,
+						author = user,
 						)
 		order.save()
 		
