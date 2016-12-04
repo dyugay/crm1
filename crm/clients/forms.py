@@ -28,6 +28,7 @@ class newOrderForm(forms.Form):
 	call_on = forms.DateField(label="Когда связаться с клиентом", error_messages=my_default_errors)
 	manager = forms.CharField(max_length = 20, label="Менеджер заказа", error_messages=my_default_errors)
 	contactPersonId = forms.IntegerField(label="Контактное лицо", error_messages=my_default_errors)
+	author = forms.CharField(max_length = 20, label='Автор записи', error_messages=my_default_errors)
 
 		
 	
@@ -35,6 +36,7 @@ class newOrderForm(forms.Form):
 	def save(self): 
 		client = get_object_or_404(Client, id=self.cleaned_data.get('clientId'))
 		manager = get_object_or_404(User, username=self.cleaned_data.get('manager'))
+		user = get_object_or_404(User, username = self.cleaned_data.get('author')) 
 		contactPerson = get_object_or_404(Persons, id=self.cleaned_data.get('contactPersonId'))
 		
 		order = Order(	client = client,
@@ -43,6 +45,7 @@ class newOrderForm(forms.Form):
 						call_or_email = self.cleaned_data.get('call_or_email'),
 						contactPerson = contactPerson,
 						manager = manager,
+						author = user,
 						)
 		order.save()
 

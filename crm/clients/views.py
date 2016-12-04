@@ -65,7 +65,9 @@ def createOrder(request, *args, **kwargs):
 			url = order.client.get_url()
 			return HttpResponseRedirect(url)
 	else:
-		initial_data['manager'] = request.user.username
+		#initial_data['manager'] = request.user.username
+		initial_data.update({'author':request.user.username, 
+							 'manager': request.user.username})
 		form = newOrderForm(initial = initial_data)
 
 	return render(request, 
