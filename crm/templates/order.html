@@ -99,8 +99,11 @@
 					<div class='form-group col-sm-2'>
 						<label for='id_call_or_email'>{{form.call_or_email.label}}</label>
 						<select class='form-control' name ='call_or_email' id='id_call_or_email' {% if form.orderId.value%}disabled{% endif %}>
+							<option value="Glazok" {% if form.call_or_email.value == "Glazok" %}selected{% endif %}>Glazok</option>
+							<option value="Manggis" {% if form.call_or_email.value == "Manggis" %}selected{% endif %}>Manggis</option>
 							<option value="call" {% if form.call_or_email.value == "call" %}selected{% endif %}>Звонок</option>
 							<option value="email" {% if form.call_or_email.value == "email" %}selected{% endif %}>Заявка</option>
+							<option value="" {% if form.call_or_email.value == "" %}selected{% endif %}></option>
 						</select>
 					</div>
 				</div>

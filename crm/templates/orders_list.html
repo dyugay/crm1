@@ -101,6 +101,7 @@
 						<th>Телефон</th>
 						<th>E-mail</th>
 						<th>Запрос клиента</th>
+						<th>Тип обращения</th>
 						<th>Статус</th>
 						<th>Когда связаться</th>
 						<th>Менеджер заказа</th>
@@ -116,6 +117,13 @@
 						<td><input class='form-control' name='telephoneNum1' id='id_telephoneNum1' value="{{form.telephoneNum1.value}}" size='16' type="text"></td>
 						<td><input class='form-control' name='email1' id='id_email1' value="{{form.email1.value}}" size='16' type="text"></td>
 						<td><input class='form-control' name='step_description' id='id_step_description' value="{{form.step_description.value}}" size='16' type="text"></td>
+						<td>
+							<select class='form-control' name="call_or_email" id='id_call_or_email'>
+									<option value='all'>Все</option>
+									<option value="Glazok" {% if form.call_or_email.value == 'Glazok'%}selected{% endif %}>Glazok</option>
+									<option value="Manggis" {% if form.call_or_email.value == 'Manggis'%}selected{% endif %}>Manggis</option>
+							</select>
+						</td>
 						<td>						
 							<select class='form-control' name ='status' id='id_status'>
 										<option value='all'>Все</option>
@@ -149,6 +157,7 @@
 						<td>{{orders.order.contactPerson.telephoneNum1}}</td>
 						<td>{{orders.order.contactPerson.email1}}</td>
 						<td>{{orders.step_description}}</td>
+						<td>{{orders.order.call_or_email}}</td>
 						<td>{{orders.order.get_status_display}}</td>
 						<td>{{orders.order.call_on|date:"d.m.Y"}}</td>
 						<td>{{orders.order.manager}}</td>
@@ -165,7 +174,7 @@
 				 {% if left_offset > 1 %}  
 			
 	
-					<li><a href="/orders_list/1/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}">{{pg}}   <<  </a></li>
+					<li><a href="/orders_list/1/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}">{{pg}}   <<  </a></li>
 	
 				 {% endif %} 
 			
@@ -178,7 +187,7 @@
 				 	      <li>
 					    {% endif %}
 	
-				           <a href="/orders_list/{{pg}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}">{{pg}}</a>
+				           <a href="/orders_list/{{pg}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}">{{pg}}</a>
 	
 				          </li>
 			   
@@ -188,7 +197,7 @@
 			     
 			     {% if right_offset < paginator.num_pages %}
 	
-				          <li><a href="/orders_list/{{paginator.num_pages}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}">{{pg}}  >> </a></li>
+				          <li><a href="/orders_list/{{paginator.num_pages}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}">{{pg}}  >> </a></li>
 	
 			     {% endif %} 			  
 			  </ul>     

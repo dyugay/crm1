@@ -238,6 +238,10 @@ def get_orders(request):
 		search_step_description_str = replace_special_symbols_str(search_step_description_str)
 		orders = orders.filter(step_description__iregex = search_step_description_str)
 		
+	
+	#search string for call_or_email
+	if request.GET.get('call_or_email') != "all" and request.GET.get('call_or_email') != None:
+			orders = orders.filter(order__call_or_email = request.GET.get('call_or_email'))
 
 
 	#search string for status
@@ -345,11 +349,20 @@ def initOrderFilterFormData(request):
 	else:
 		orderDateEnd = request.GET.get('orderDateEnd')
 	
-	
+
+	if request.GET.get('call_or_email') == None:
+		call_or_email = 'all'
+	else:
+		call_or_email = request.GET.get('call_or_email')
+		
+		
+
 	if request.GET.get('status') == None:
 		status = 'all'
 	else:
 		status = request.GET.get('status')
+		
+		
 					
 	if request.GET.get('manager') == None:
 		manager = 'all'
@@ -383,6 +396,7 @@ def initOrderFilterFormData(request):
 					'telephoneNum1': telephoneNum1,
 					'email1': email1,
 					'step_description': step_description,
+					'call_or_email': call_or_email,
 					}
 	
 	return initial_data

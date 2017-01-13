@@ -65,7 +65,7 @@ class newOrderForm(forms.Form):
 class orderForm(forms.Form):
 	orderId = forms.CharField(max_length = 10, label='Заказ', error_messages=my_default_errors)
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors)
-	call_or_email = forms.CharField(max_length = 5, label="Тип обращения", error_messages=my_default_errors, required=False)
+	call_or_email = forms.CharField(max_length = 8, label="Тип обращения", error_messages=my_default_errors, required=False)
 	step_description = forms.CharField(label="Описание шага", error_messages=my_default_errors, initial='')
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
 	call_on = forms.DateField(label="Когда связаться с клиентом", error_messages=my_default_errors)
@@ -478,7 +478,7 @@ class createClientForm(forms.Form):
 	email1 = forms.EmailField(max_length = 40, label='E-mail', error_messages=my_default_errors, required=False, initial='')
 	city = forms.CharField(max_length = 20, label = "Город", error_messages = my_default_errors, initial='', required=False)
 	author = forms.CharField(max_length = 20, label='Автор записи', error_messages=my_default_errors)
-	call_or_email = forms.CharField(max_length = 5, label="Тип обращения", error_messages=my_default_errors)
+	call_or_email = forms.CharField(max_length = 8, label="Тип обращения", error_messages=my_default_errors)
 	step_description = forms.CharField(label="Описание шага", error_messages=my_default_errors, initial='')
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
 	call_on = forms.DateField(label="Когда связаться с клиентом", error_messages=my_default_errors)
@@ -569,6 +569,7 @@ class orderListFilterForm(forms.Form):
 	telephoneNum1 = forms.CharField(max_length = 16, label='Телефон', error_messages=my_default_errors, initial='', required=False)
 	email1 = forms.CharField(max_length = 40, label='Email', error_messages=my_default_errors, initial='', required=False)
 	step_description = forms.CharField(max_length = 100, label='Запрос клиента', initial='', error_messages=my_default_errors, required=False)
+	call_or_email = forms.CharField(max_length = 8, label='Тип обращения', initial='', error_messages=my_default_errors, required=False)
 
 
 	def get_filter_url(self, **kwars):
@@ -580,9 +581,11 @@ class orderListFilterForm(forms.Form):
 		telephoneNum1 = self.cleaned_data.get('telephoneNum1').encode('utf-8')
 		email1 = self.cleaned_data.get('email1').encode('utf-8')
 		step_description = self.cleaned_data.get('step_description').encode('utf-8')
+		#call_or_email = self.cleaned_data.get('call_or_email').encode('utf-8')
 																						
 																						
-		
+		#print call_or_email 
+		#print self.cleaned_data.get('call_or_email')
 		url=reverse('get_orders_list', kwargs={'pageNum': pg}) + '?'+ urlencode({'manager': self.cleaned_data.get('manager'),
 																						'status': self.cleaned_data.get('status'),
 																						'clientId': clientId,
@@ -595,6 +598,7 @@ class orderListFilterForm(forms.Form):
 																						'orderDateEnd': self.cleaned_data.get('orderDateEnd'),
 																						'call_onBegin': self.cleaned_data.get('call_onBegin'),
 																						'call_onEnd': self.cleaned_data.get('call_onEnd'),
+																						'call_or_email': self.cleaned_data.get('call_or_email'),
 																						})
 
 		return url

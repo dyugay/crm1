@@ -84,11 +84,13 @@ class Order(models.Model):
 				   )
 	call_or_email_choice = (
 						 ('call', 'звонок'),
-						 ('email', 'заявка'),   
+						 ('email', 'заявка'), 
+						 ('glazok', 'Glazok'),
+						 ('manggis', 'Manggis'),  
 						 ) 
 
 	client = models.ForeignKey(Client)
-	call_or_email = models.CharField(max_length = 5, choices=call_or_email_choice)
+	call_or_email = models.CharField(max_length = 8, choices=call_or_email_choice)
 	status = models.CharField(max_length = 20, choices=status_choice, default='INTS')
 	call_on = models.DateField(blank = True)
 	contactPerson = models.ForeignKey(Persons, null=True)
