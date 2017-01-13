@@ -90,7 +90,8 @@ class orderForm(forms.Form):
 
 		#save order data
 		order = kwargs.get('order')
-		order.call_or_email = self.cleaned_data.get('call_or_email')
+		#order.call_or_email = self.cleaned_data.get('call_or_email')
+		#print order.call_or_email
 		order.status = self.cleaned_data.get('status')
 		order.call_on = self.cleaned_data.get('call_on')
 		order.manager = manager
