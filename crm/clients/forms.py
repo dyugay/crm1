@@ -22,7 +22,7 @@ my_default_errors = {
 
 class newOrderForm(forms.Form):
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors)
-	call_or_email = forms.CharField(max_length = 5, label="Тип обращения", error_messages=my_default_errors)
+	call_or_email = forms.CharField(max_length = 8, label="Тип обращения", error_messages=my_default_errors)
 	step_description = forms.CharField(label="Описание шага", error_messages=my_default_errors, initial='')
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
 	call_on = forms.DateField(label="Когда связаться с клиентом", error_messages=my_default_errors)
