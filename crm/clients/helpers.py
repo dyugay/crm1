@@ -767,7 +767,12 @@ def get_status_numbers(**kwargs):
 		if request.GET.get('manager') != "all" and request.GET.get('manager') != None:
 				orders = orders.filter(order__manager__username = request.GET.get('manager'))
 				
-	
+				
+		#search string for call_or_email
+		if request.GET.get('call_or_email') != "all" and request.GET.get('call_or_email') != None:
+				orders = orders.filter(order__call_or_email = request.GET.get('call_or_email'))
+				#print request.GET.get('call_or_email')
+				
 	
 		#search for orderDate
 		if request.GET.get('orderDateBegin') \
