@@ -864,7 +864,6 @@ def get_week_analytics():
 	day = datetime.today()
 	struct_datetime = day.timetuple()
 	count = Order_process.objects.filter(date_step__day=struct_datetime[2], date_step__month=struct_datetime[1], date_step__year=struct_datetime[0], step=1).count()
-	#week_analytics = {day.date():count}
 	week_analytics_l = [(day.date(), count)]
 	
 	
@@ -872,16 +871,169 @@ def get_week_analytics():
 		day = day-timedelta(days=1)
 		struct_datetime = day.timetuple()
 		count = Order_process.objects.filter(date_step__day=struct_datetime[2], date_step__month=struct_datetime[1], date_step__year=struct_datetime[0], step=1).count()
-		#week_analytics.update({day.date():count})
 		week_analytics_l.append((day.date(), count))
 	
-
-	#for date, numbers in sorted(week_analytics.items()):
-	#	print date, " ", numbers
-	
-	#for date, val in week_analytics_l:
-		#print date, val
-
-	
-	#return week_analytics
 	return week_analytics_l
+
+
+
+
+
+
+
+def iterate_by_date(request):
+	
+	###################
+	#check out date begin and date end parameters
+	if request.GET.get('orderDateBegin') == None:
+		orderDateBegin = str(datetime.date(datetime.today() - timedelta(days=7)))
+	else:
+		orderDateBegin = request.GET.get('orderDateBegin')
+	
+	if request.GET.get('orderDateEnd') == None:
+		orderDateEnd = str(date.today())
+	else:
+		orderDateEnd = request.GET.get('orderDateEnd')
+	
+	orderDateBegin = datetime.strptime(orderDateBegin, "%Y-%m-%d")
+	orderDateEnd = datetime.strptime(orderDateEnd, "%Y-%m-%d")
+
+
+	###################
+	#prepare Query sets
+	Glazok_orders = Order_process.objects.filter(step=1, order__call_or_email = 'Glazok', date_step__range=(orderDateBegin, orderDateEnd))
+	Manggis_orders = Order_process.objects.filter(step=1, order__call_or_email = 'Manggis', date_step__range=(orderDateBegin, orderDateEnd))
+
+	if request.GET.get('status') != "all" and request.GET.get('status') != None:
+			Glazok_orders = Glazok_orders.filter(order__status = request.GET.get('status'))
+			Manggis_orders = Manggis_orders.filter(order__status = request.GET.get('status'))
+
+	
+	if request.GET.get('manager') != "all" and request.GET.get('manager') != None:
+			Glazok_orders = Glazok_orders.filter(order__manager__username = request.GET.get('manager'))
+			Manggis_orders = Manggis_orders.filter(order__manager__username = request.GET.get('manager'))
+
+
+
+
+	######################
+	#create list of order numbers using group by
+	order_numbers = []
+	if request.GET.get('group_by') == 'DAY' \
+		or request.GET.get('group_by') == None:
+			day = orderDateBegin
+			while day<=orderDateEnd: 
+				Glazok_numbers = Glazok_orders.filter(date_step__date=day).count()
+				Manggis_numbers = Manggis_orders.filter(date_step__date=day).count()
+				order_numbers.append((day, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
+				day = day + timedelta(days=1)
+
+	elif request.GET.get('group_by') == 'MONTH':
+			month = datetime.date(orderDateBegin).month
+			month_end = datetime.date(orderDateEnd).month
+			while month<=month_end:
+				Glazok_numbers = Glazok_orders.filter(date_step__month=month).count()
+				Manggis_numbers = Manggis_orders.filter(date_step__month=month).count()
+				order_numbers.append((month, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
+				month = month + 1
+			
+			
+	elif request.GET.get('group_by') == 'YEAR':
+			year = datetime.date(orderDateBegin).year
+			year_end = datetime.date(orderDateEnd).year
+			while year<=year_end:
+				Glazok_numbers = Glazok_orders.filter(date_step__year=year).count()
+				Manggis_numbers = Manggis_orders.filter(date_step__year=year).count()
+				order_numbers.append((year, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
+				year = year + 1
+	else:
+			print 'what else?'
+	
+
+
+	
+
+	
+	return order_numbers
+	
+	
+	
+
+
+
+
+
+
+
+
+
+def init_data_for_orders_report(request):
+
+
+
+
+	if request.GET.get('orderDateBegin') == None:
+		orderDateBegin = str(datetime.date(datetime.today() - timedelta(days=7)))
+
+	else:
+		orderDateBegin = request.GET.get('orderDateBegin')
+	
+
+	if request.GET.get('orderDateEnd') == None:
+		orderDateEnd = str(date.today())
+	else:
+		orderDateEnd = request.GET.get('orderDateEnd')
+	
+
+
+	if request.GET.get('status') == None:
+		status = 'all'
+	else:
+		status = request.GET.get('status')
+		
+		
+					
+	if request.GET.get('manager') == None:
+		manager = 'all'
+	else:
+		manager = request.GET.get('manager')
+					
+
+
+	if request.GET.get('group_by') == None:
+		group_by = 'DAY'
+	else:
+		group_by = request.GET.get('group_by')					
+					
+					
+	initial_data = {
+					'manager': manager, 
+					'group_by': group_by, 
+					'status': status, 
+					'orderDateBegin': orderDateBegin, 
+					'orderDateEnd': orderDateEnd, 
+					}
+	return initial_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
