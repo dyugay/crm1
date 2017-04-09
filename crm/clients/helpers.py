@@ -901,8 +901,11 @@ def iterate_by_date(request):
 
 	###################
 	#prepare Query sets
-	Glazok_orders = Order_process.objects.filter(step=1, order__call_or_email = 'Glazok', date_step__range=(orderDateBegin, orderDateEnd))
-	Manggis_orders = Order_process.objects.filter(step=1, order__call_or_email = 'Manggis', date_step__range=(orderDateBegin, orderDateEnd))
+	#make some transformation beacause last date is condering by django as date and 00:00:00 time
+	orderDateEnd1 = orderDateEnd + timedelta(days=1)
+	
+	Glazok_orders = Order_process.objects.filter(step=1, order__call_or_email = 'Glazok', date_step__range=(orderDateBegin, orderDateEnd1))
+	Manggis_orders = Order_process.objects.filter(step=1, order__call_or_email = 'Manggis', date_step__range=(orderDateBegin, orderDateEnd1))
 
 	if request.GET.get('status') != "all" and request.GET.get('status') != None:
 			Glazok_orders = Glazok_orders.filter(order__status = request.GET.get('status'))
@@ -923,10 +926,13 @@ def iterate_by_date(request):
 		or request.GET.get('group_by') == None:
 			day = orderDateBegin
 			while day<=orderDateEnd: 
+
 				Glazok_numbers = Glazok_orders.filter(date_step__date=day).count()
 				Manggis_numbers = Manggis_orders.filter(date_step__date=day).count()
 				order_numbers.append((day, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
 				day = day + timedelta(days=1)
+
+				
 
 	elif request.GET.get('group_by') == 'MONTH':
 			month = datetime.date(orderDateBegin).month
