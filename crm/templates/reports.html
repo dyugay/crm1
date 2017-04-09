@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+{% extends "main.html" %}
+
+<html>
+	
+<head>
+
+	{% block head %}
+		{{block.super}}
+	{% endblock %}
+
+</head>
+
+
+<body>
+	{% block nav %}
+		{{block.super}}
+	{% endblock %}
+
+	{% block content %}
+		{% for field in form %}
+			{% if field.errors %}
+				<div class="row">
+					<div class='col-sm-2 bg-danger'>{{field.label}}</div>
+					<div class='col-sm-2 bg-danger'>{{field.errors}}</div>     
+				</div>
+			{% endif %}
+		{% endfor %}
+		<div class="container-fluid">
+			<div class='row'>
+				<div class='col-sm-2'>
+					<h2>Список отчетов</h2>
+					<ol>
+						<li><a href='/report_orders/1/'>Заказы за период</a></li>
+						<li>...</li>
+						<li>...</li>
+					</ol>
+
+					
+					
+					
+					
+				</div>
+			</div>
+		
+		
+		</div> 
+	{% endblock %}
+
+</body>	 
+</html>

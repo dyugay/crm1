@@ -558,7 +558,7 @@ class createClientForm(forms.Form):
 
 
 class orderListFilterForm(forms.Form):
-	manager = forms.CharField(max_length = 20, label="Фильтр Менеджер заказа", error_messages=my_default_errors)
+	manager = forms.CharField(max_length = 20, label="Менеджер заказа", error_messages=my_default_errors)
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
 	orderDateBegin = forms.DateField(label="Дата создания, с", error_messages=my_default_errors, required=False)
 	orderDateEnd = forms.DateField(label="Дата создания, по", error_messages=my_default_errors, required=False)
@@ -689,3 +689,44 @@ class clientsByLKForm(forms.Form):
 																						})
 	
 		return url
+
+
+
+
+
+
+
+
+
+
+class report_orders_form(forms.Form):
+	manager = forms.CharField(max_length = 20, label="Менеджер заказа", error_messages=my_default_errors, required=False)
+	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors, required=False)
+	orderDateBegin = forms.DateField(label="Дата создания, с", error_messages=my_default_errors, required=False)
+	orderDateEnd = forms.DateField(label="Дата создания, по", error_messages=my_default_errors, required=False)
+	group_by = forms.CharField(max_length = 20, label="Группировать по", initial='', error_messages=my_default_errors, required=False)
+	
+
+	def get_filter_url(self, **kwars):
+		pg = kwars.get('pg')
+		url=reverse('report_orders', kwargs={'pageNum': pg}) + '?'+ urlencode({
+																						'manager': self.cleaned_data.get('manager'),
+																						'status': self.cleaned_data.get('status'),
+																						'orderDateBegin': self.cleaned_data.get('orderDateBegin'),
+																						'orderDateEnd': self.cleaned_data.get('orderDateEnd'),
+																						'group_by':self.cleaned_data.get('group_by'),
+																						})
+
+		return url
+
+
+
+
+
+
+
+
+
+
+
+

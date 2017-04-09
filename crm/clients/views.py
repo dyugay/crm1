@@ -6,6 +6,7 @@ from clients.forms import createPersonForm, changePersonForm, addLKForm, changeC
 from clients.forms import addLegalDetailsForm, changeLegalDetailsForm, createClientForm
 from clients.forms import orderListFilterForm, clientsByPersonsForm, clientsByLKForm
 from clients.forms import clientsByLegalDetailsForm
+from clients.forms import report_orders_form
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -14,7 +15,7 @@ from clients.helpers import get_order_related_data, paginate, initOrderFilterFor
 from clients.helpers import initClientsByPersonsFormData
 from clients.helpers import get_client_data, get_that_clientId_url, get_orders, get_clients_by_persons_search_criteria
 from clients.helpers import get_clients_by_LK_search_criteria, get_clients_by_legal_details_search_criteria, initClientsByLegalDetailsFormData
-from clients.helpers import get_status_numbers, get_week_analytics
+from clients.helpers import get_status_numbers, get_week_analytics, iterate_by_date, init_data_for_orders_report
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -585,3 +586,64 @@ def get_clients_by_legal_details(request, *args, **kwargs):
 					   'users': users,
 						}
 						 )
+						 
+						 
+#reports
+@login_required
+def reports(request, *args, **kwargs):
+	#return HttpResponse('Hi')
+	return render(request,
+				'reports.html')
+				
+				
+				
+
+
+
+
+
+#report - orders for period
+@login_required
+def report_orders(request, *args, **kwargs):
+	#return HttpResponse('report orders')
+	
+	
+	
+	if request.method=='POST':
+		form = report_orders_form(request.POST)
+		if form.is_valid():
+			url = form.get_filter_url(pg=kwargs.get('pageNum'))
+			return HttpResponseRedirect(url)
+		else:
+			return render(request,
+						'report_orders.html',
+						{
+							'form': form,
+						})
+
+	else:
+		order_numbers = iterate_by_date(request)
+		paginatorAttr = paginate(request, order_numbers, kwargs.get('pageNum'))
+		users = User.objects.all()
+		initial_data = init_data_for_orders_report(request)
+		form=report_orders_form(initial_data)
+		return render(request,
+					'report_orders.html',
+					{
+						'paginator': paginatorAttr.get('paginator'),
+						'page': paginatorAttr.get('page'),
+						'right_offset': paginatorAttr.get('right_offset'),
+						'left_offset': paginatorAttr.get('left_offset'),
+						'display_range': paginatorAttr.get('display_range'),
+						'form': form,
+						'users': users,
+					})
+
+
+
+	
+
+
+
+
+
