@@ -6,6 +6,8 @@ from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta, date
 from django.db.models import Q
+from calendar import monthrange
+
 
 #get data that is related to the order
 def get_order_related_data(order):
@@ -928,29 +930,113 @@ def iterate_by_date(request):
 			while day<=orderDateEnd: 
 
 				Glazok_numbers = Glazok_orders.filter(date_step__date=day).count()
+				Glazok_numbers_DONE = Glazok_orders.filter(date_step__date=day, order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__date=day, order__status = 'FAIL').count()
 				Manggis_numbers = Manggis_orders.filter(date_step__date=day).count()
-				order_numbers.append((day, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
+				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__date=day, order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__date=day, order__status = 'FAIL').count()
+				total = Glazok_numbers + Manggis_numbers 
+				orderDateBegin_link = day
+				orderDateEnd_link = day
+				order_numbers.append((orderDateBegin_link, 
+										Glazok_numbers, 
+										Manggis_numbers, 
+										Glazok_numbers_DONE, 
+										Glazok_numbers_FAIL, 
+										Manggis_numbers_DONE, 
+										Manggis_numbers_FAIL,
+										total,
+											orderDateEnd_link,
+											))
 				day = day + timedelta(days=1)
 
 				
 
 	elif request.GET.get('group_by') == 'MONTH':
-			month = datetime.date(orderDateBegin).month
-			month_end = datetime.date(orderDateEnd).month
-			while month<=month_end:
-				Glazok_numbers = Glazok_orders.filter(date_step__month=month).count()
-				Manggis_numbers = Manggis_orders.filter(date_step__month=month).count()
-				order_numbers.append((month, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
-				month = month + 1
-			
+			#month = datetime.date(orderDateBegin).month
+			#month_end = datetime.date(orderDateEnd).month
+			#while month<=month_end:
+				#Glazok_numbers = Glazok_orders.filter(date_step__month=month).count()
+				#Glazok_numbers_DONE = Glazok_orders.filter(date_step__month=month, order__status = 'DONE').count()
+				#Glazok_numbers_FAIL = Glazok_orders.filter(date_step__month=month, order__status = 'FAIL').count()
+				#Manggis_numbers = Manggis_orders.filter(date_step__month=month).count()
+				#Manggis_numbers_DONE =  Manggis_orders.filter(date_step__month=month, order__status = 'DONE').count()
+				#Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__month=month, order__status = 'FAIL').count()
+				#date_begin_link, date_end_link = set_begin_n_end_day_for_period(request.GET.get('group_by'))
+				#total = Glazok_numbers + Manggis_numbers 
+				#order_numbers.append((month, Glazok_numbers, Manggis_numbers, 
+											#Glazok_numbers_DONE, Glazok_numbers_FAIL, 
+											#Manggis_numbers_DONE, Manggis_numbers_FAIL,
+											#total))
+				#month = month + 1
+				#debug
+			day = datetime(orderDateBegin.year, orderDateBegin.month, 1)
+			while day<=orderDateEnd: 
+				if day < orderDateBegin:
+					orderDateBegin_link = orderDateBegin
+				else:
+					orderDateBegin_link = day
+				
+				orderDateEnd_link = day + timedelta(days=(monthrange(day.year, day.month)[1] - 1))
+				if orderDateEnd_link > orderDateEnd:
+					orderDateEnd_link = orderDateEnd
+								
+				#print 'begin:', orderDateBegin_link, "end:", orderDateEnd_link 
+				Glazok_numbers = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link)).count()
+				Glazok_numbers_DONE = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'FAIL').count()
+				Manggis_numbers = Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link)).count()
+				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'FAIL').count()
+				total = Glazok_numbers + Manggis_numbers 
+				order_numbers.append((orderDateBegin_link, 
+												Glazok_numbers, 
+												Manggis_numbers, 
+												Glazok_numbers_DONE, 
+												Glazok_numbers_FAIL, 
+												Manggis_numbers_DONE, 
+												Manggis_numbers_FAIL,
+												total,
+												orderDateEnd_link
+												))
+				day = day + timedelta(days=monthrange(day.year, day.month)[1])
+				#print 'day', day
+				#print
+
 			
 	elif request.GET.get('group_by') == 'YEAR':
 			year = datetime.date(orderDateBegin).year
 			year_end = datetime.date(orderDateEnd).year
 			while year<=year_end:
+				orderDateBegin_link = datetime(year, 1, 1)
+				orderDateEnd_link = datetime(year, 12, 31)
+				
+				if orderDateBegin_link < orderDateBegin:
+					orderDateBegin_link = orderDateBegin
+					
+				if orderDateEnd_link > orderDateEnd:
+					orderDateEnd_link = orderDateEnd 
+				
+				#print "begin:", orderDateBegin_link, "end:", orderDateEnd_link 
+				#print
+				
 				Glazok_numbers = Glazok_orders.filter(date_step__year=year).count()
+				Glazok_numbers_DONE = Glazok_orders.filter(date_step__year=year, order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__year=year, order__status = 'FAIL').count()
 				Manggis_numbers = Manggis_orders.filter(date_step__year=year).count()
-				order_numbers.append((year, Glazok_numbers, Manggis_numbers, request.GET.get('status'), request.GET.get('manager')))
+				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__year=year, order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__year=year, order__status = 'FAIL').count()
+				total = Glazok_numbers + Manggis_numbers 
+				order_numbers.append((orderDateBegin_link,
+										Glazok_numbers, 
+										Manggis_numbers, 
+										Glazok_numbers_DONE, 
+										Glazok_numbers_FAIL, 
+										Manggis_numbers_DONE, 
+										Manggis_numbers_FAIL,
+										total,
+										orderDateEnd_link,
+										))
 				year = year + 1
 	else:
 			print 'what else?'
@@ -958,7 +1044,6 @@ def iterate_by_date(request):
 
 
 	
-
 	
 	return order_numbers
 	
@@ -1026,7 +1111,17 @@ def init_data_for_orders_report(request):
 
 
 
-
+#def set_begin_n_end_day_for_period(period_type):
+	
+	
+	#date_end = '2001-12-01'
+	#date_begin = '2001-12-01'
+	
+	##if period_type == "MONTH":
+		##date_begin = "2017-" + "04-" + str(monthrange(2017, 04)[1])
+		##print period_type
+	
+	#return date_begin, date_end
 
 
 

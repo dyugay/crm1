@@ -98,22 +98,35 @@
 				 <tr>
 						<th>Период</th>
 						<th>Заказы Glazok</th>
+						<th>Заказы Glazok (выполнены)</th>
+						<th>Заказы Glazok (отказы)</th>
 						<th>Заказы Manggis</th>
+						<th>Заказы Manggis (выполнено)</th>
+						<th>Заказы Manggis (отказы)</th>
+						
+						<th>Итого за период</th>
 				 </tr>
 				 </thead>
 				 
 				 <tbody>
-					{% for period, Glazok_numbers, Manggis_numbers, status, manager in page.object_list %}
+					{% for orderDateBegin_link, Glazok_numbers, Manggis_numbers, Glazok_numbers_DONE, Glazok_numbers_FAIL, Manggis_numbers_DONE, Manggis_numbers_FAIL, total, orderDateEnd_link in page.object_list %}
 					<tr>
 						{%if form.group_by.value == "DAY"%}
-							<td>{{period|date:"d.m.Y"}}</td>
-							<td><a href="/orders_list/1/?orderDateEnd={{period|date:'Y-m-d'}}&orderDateBegin={{period|date:'Y-m-d'}}&manager={{form.manager.value}}&status={{form.status.value}}&call_or_email=Glazok">{{Glazok_numbers}}</a></td>
-							<td><a href="/orders_list/1/?orderDateEnd={{period|date:'Y-m-d'}}&orderDateBegin={{period|date:'Y-m-d'}}&manager={{form.manager.value}}&status={{form.status.value}}&call_or_email=Manggis">{{Manggis_numbers}}</a></td>
+							<td>{{orderDateBegin_link|date:"d.m.Y, D"}}</td>
+						{%elif form.group_by.value == "MONTH"%}
+							<td>{{orderDateBegin_link|date:"Y, F"}}</td>
 						{%else%}
-							<td>{{period}}</td>
-							<td>{{Glazok_numbers}}</td>
-							<td>{{Manggis_numbers}}</td>
+							<td>{{orderDateBegin_link|date:"Y"}}</td>
 						{%endif%}
+
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status={{form.status.value}}&call_or_email=Glazok">{{Glazok_numbers}}</a></td>
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status=DONE&call_or_email=Glazok">{{Glazok_numbers_DONE}}</a></td>
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status=FAIL&call_or_email=Glazok">{{Glazok_numbers_FAIL}}</a></td>
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status={{form.status.value}}&call_or_email=Manggis">{{Manggis_numbers}}</a></td>
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status=DONE&call_or_email=Manggis">{{Manggis_numbers_DONE}}</a></td>
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status=FAIL&call_or_email=Manggis">{{Manggis_numbers_FAIL}}</a></td>
+							<td><a href="/orders_list/1/?orderDateEnd={{orderDateEnd_link|date:'Y-m-d'}}&orderDateBegin={{orderDateBegin_link|date:'Y-m-d'}}&manager={{form.manager.value}}&status={{form.status.value}}">{{total}}</a></td>
+
 
 				    </tr>
 					{% endfor %}
