@@ -977,18 +977,22 @@ def iterate_by_date(request):
 				else:
 					orderDateBegin_link = day
 				
-				orderDateEnd_link = day + timedelta(days=(monthrange(day.year, day.month)[1] - 1))
+				orderDateEnd_link = day + timedelta(days=(monthrange(day.year, day.month)[1]-1))
 				if orderDateEnd_link > orderDateEnd:
 					orderDateEnd_link = orderDateEnd
-								
+
+				#make some transformation beacause last date is condering by django as date and 00:00:00 time
+				orderDateEnd1 = orderDateEnd_link + timedelta(days=1)
+
 				#print 'begin:', orderDateBegin_link, "end:", orderDateEnd_link 
-				Glazok_numbers = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link)).count()
-				Glazok_numbers_DONE = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'DONE').count()
-				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'FAIL').count()
-				Manggis_numbers = Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link)).count()
-				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'DONE').count()
-				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd_link), order__status = 'FAIL').count()
+				Glazok_numbers = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1)).count()
+				Glazok_numbers_DONE = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'FAIL').count()
+				Manggis_numbers = Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1)).count()
+				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'FAIL').count()
 				total = Glazok_numbers + Manggis_numbers 
+
 				order_numbers.append((orderDateBegin_link, 
 												Glazok_numbers, 
 												Manggis_numbers, 
