@@ -237,7 +237,6 @@ def client(request, *args, **kwargs):
 	               {
 	                'client':client,
 	                'persons':persons,
-	                #'form':form,
 	                'users': users,
 	                'lks': lks,
 	                'legal_details': legal_details,
@@ -317,6 +316,7 @@ def changePerson(request, *args, **kwargs):
 					'telephoneNum1': person.telephoneNum1,
 					'telephoneNum2': person.telephoneNum2,
 					'telephoneNum3': person.telephoneNum3,
+					'extensionTelNum3':person.extensionTelNum3,
 					'email1': person.email1,
 					'email2': person.email2,
 					#'focalPoint': person.focalPoint,

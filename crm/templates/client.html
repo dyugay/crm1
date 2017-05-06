@@ -48,7 +48,10 @@
 						{% endif %}
 						
 						{% if person.telephoneNum3 %}
-							, {{person.telephoneNum3}}
+							, {{person.telephoneNum3}} 
+							{% if person.extensionTelNum3 %}
+								#{{person.extensionTelNum3}}
+							{% endif %}
 						{% endif %}
 						
 						{% if person.email1 %}

@@ -143,6 +143,7 @@ class createPersonForm(forms.Form):
 	telephoneNum1 = forms.CharField(max_length = 16, label='Телефон 1', error_messages=my_default_errors, required=False, initial='')
 	telephoneNum2 = forms.CharField(max_length = 16, label='Телефон 2', error_messages=my_default_errors, required=False, initial='')
 	telephoneNum3 = forms.CharField(max_length = 16, label='Телефон 3', error_messages=my_default_errors, required=False, initial='')
+	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
 	#focalPoint = forms.BooleanField(label='Основной контакт', error_messages=my_default_errors, required=False, initial=False)
@@ -230,6 +231,7 @@ class createPersonForm(forms.Form):
 						 telephoneNum1 = self.cleaned_data.get('telephoneNum1'),
 						 telephoneNum2 = self.cleaned_data.get('telephoneNum2'),
 						 telephoneNum3 = self.cleaned_data.get('telephoneNum3'),
+						 extensionTelNum3 = self.cleaned_data.get('extensionTelNum3'),
 						 email1 = self.cleaned_data.get('email1'),
 						 email2 = self.cleaned_data.get('email2'),
 						 #focalPoint = self.cleaned_data.get('focalPoint'),
@@ -249,6 +251,7 @@ class changePersonForm(forms.Form):
 	telephoneNum1 = forms.CharField(max_length = 16, label='Телефон 1', error_messages=my_default_errors, required=False, initial='')
 	telephoneNum2 = forms.CharField(max_length = 16, label='Телефон 2', error_messages=my_default_errors, required=False, initial='')
 	telephoneNum3 = forms.CharField(max_length = 16, label='Телефон 3', error_messages=my_default_errors, required=False, initial='')
+	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
 	#focalPoint = forms.BooleanField(label='Основной контакт', error_messages=my_default_errors, required=False)
@@ -337,6 +340,7 @@ class changePersonForm(forms.Form):
 		person.telephoneNum1 = self.cleaned_data.get('telephoneNum1')
 		person.telephoneNum2 = self.cleaned_data.get('telephoneNum2')
 		person.telephoneNum3 = self.cleaned_data.get('telephoneNum3')
+		person.extensionTelNum3 = self.cleaned_data.get('extensionTelNum3')
 		person.email1 = self.cleaned_data.get('email1')
 		person.email2 = self.cleaned_data.get('email2')
 		#person.focalPoint = self.cleaned_data.get('focalPoint')

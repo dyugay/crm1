@@ -91,7 +91,7 @@
 							<td>{{person.lastName}}</td>
 							<td>{{person.telephoneNum1}}</td>
 							<td>{{person.telephoneNum2}}</td>
-							<td>{{person.telephoneNum3}}</td>
+							<td>{{person.telephoneNum3}} {% if person.extensionTelNum3 %} #{{person.extensionTelNum3}}{%endif%}</td>
 							<td>{{person.email1}}</td>
 							<td>{{person.email2}}</td>
 						</tr>

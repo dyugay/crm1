@@ -77,14 +77,18 @@
 
 
 				 <div class="row">
-					<div class="form-group col-sm-3">
+					<div class="form-group col-sm-5">
 						<label for='id_contactPersonId'>{{form.contactPersonId.label}}</label>
 						<select class='form-control' name='contactPersonId' id='id_contactPersonId'>
 							{% for person in persons %}
 								<option value="{{person.id}}" {% if person.get_id_str == form.contactPersonId.value %}selected{% endif%}>
 																															{{person.firstName}}
 																								{% if person.telephoneNum1 %}, {{person.telephoneNum1}} {%endif%}
-																										{%if person.email1 %}, {{person.email1}}        {%endif%}
+																								{% if person.telephoneNum2 %}, {{person.telephoneNum2}} {%endif%}
+																								{% if person.telephoneNum3 %}, {{person.telephoneNum3}} {%endif%}
+																								{% if person.extensionTelNum3 %} #{{person.extensionTelNum3}}{%endif%}
+																								{%if person.email1 %}, {{person.email1}}        		{%endif%}
+																								{%if person.email2 %}, {{person.email2}}    	        {%endif%}
 								</option>
 							{% endfor %}
 						</select>
@@ -111,7 +115,7 @@
 
 
 				 <div class="row">
-					<div class="form-group col-sm-2">
+					<div class="form-group col-sm-5">
 						<label for='id_step_description'>{{form.step_description.label}}</label>
 						<textarea class="form-control" rows="6" id="id_step_description" name="step_description" placeholder="Описание шага" >{{form.step_description.value}}</textarea>
 					</div>
