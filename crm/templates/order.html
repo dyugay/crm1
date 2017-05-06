@@ -82,7 +82,8 @@
 						<select class='form-control' name='contactPersonId' id='id_contactPersonId'>
 							{% for person in persons %}
 								<option value="{{person.id}}" {% if person.get_id_str == form.contactPersonId.value %}selected{% endif%}>
-																															{{person.firstName}}
+																								{{person.firstName}}
+																								{% if person.position %} ({{person.position}}){%endif%}
 																								{% if person.telephoneNum1 %}, {{person.telephoneNum1}} {%endif%}
 																								{% if person.telephoneNum2 %}, {{person.telephoneNum2}} {%endif%}
 																								{% if person.telephoneNum3 %}, {{person.telephoneNum3}} {%endif%}

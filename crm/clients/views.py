@@ -319,7 +319,7 @@ def changePerson(request, *args, **kwargs):
 					'extensionTelNum3':person.extensionTelNum3,
 					'email1': person.email1,
 					'email2': person.email2,
-					#'focalPoint': person.focalPoint,
+					'position':person.position,
 					'author': person.author,
 					'changedOn': person.changedOn,
 					}

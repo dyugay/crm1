@@ -103,7 +103,6 @@
 						<th>Запрос клиента</th>
 						<th>Тип обращения</th>
 						<th>Статус</th>
-						<th>Когда связаться</th>
 						<th>Менеджер заказа</th>
 						<th>Когда создан</th>
 				 </tr>
@@ -137,7 +136,7 @@
 										<option value="FAIL" {% if form.status.value == 'FAIL'%}selected{% endif %}>Отказ</option>
 							</select>
 						</td>
-						<td></td>
+
 						<td>
 							<select class='form-control' name="manager" id='id_manager'>
 									<option value='all'>Все</option>
@@ -153,13 +152,12 @@
 					<tr>
 						<td><a href="{{orders.order.client.get_url}}">{{orders.order.client.id}}</a></td>
 						<td><a href="{{orders.order.get_url}}">{{orders.order.id}}</a></td>
-						<td>{{orders.order.contactPerson.firstName}}</td>
+						<td>{{orders.order.contactPerson.firstName}} {%if orders.order.contactPerson.position%}({{orders.order.contactPerson.position}}) {%endif%}</td>
 						<td>{{orders.order.contactPerson.telephoneNum1}}</td>
 						<td>{{orders.order.contactPerson.email1}}</td>
 						<td>{{orders.step_description}}</td>
 						<td>{{orders.order.call_or_email}}</td>
 						<td>{{orders.order.get_status_display}}</td>
-						<td>{{orders.order.call_on|date:"d.m.Y"}}</td>
 						<td>{{orders.order.manager}}</td>
 						<td>{{orders.date_step|date:"d.m.Y, H:i"}}</td>
 	

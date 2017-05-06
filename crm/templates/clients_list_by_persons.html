@@ -77,6 +77,7 @@
 						<th>Тел.3</th>
 						<th>E-mail1</th>
 						<th>E-mail2</th>
+						<th>Должность</th>
 				 </tr>
 				 </thead>
 				 
@@ -94,6 +95,7 @@
 							<td>{{person.telephoneNum3}} {% if person.extensionTelNum3 %} #{{person.extensionTelNum3}}{%endif%}</td>
 							<td>{{person.email1}}</td>
 							<td>{{person.email2}}</td>
+							<td>{{person.position}}</td>
 						</tr>
 						
 					{% endfor %}

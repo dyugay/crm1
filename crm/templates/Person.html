@@ -21,7 +21,7 @@
 		<form method='post'>
 			<legend>
 				<div class='form-inline'>
-					<label for='id_clientId'>Контактное лицо для Клиента</label>
+					<label for='id_clientId'>Контактное лицо Клиента</label>
 					<a href="{% url 'client' clientId=form.clientId.value %}"><input class='form-control' name='clientId' id='id_clientId' value='{{form.clientId.value}}' size='10' readonly></a>
 				</div>
 			</legend>
@@ -117,7 +117,12 @@
 				</div>
 			</div>
 			
-
+			<div class='row'>
+				<div class='form-group col-sm-2'>
+					<label for='id_email2'>{{form.position.label}}</label>
+					<input class='form-control' name='position' id='id_position' value='{{form.position.value}}'>
+				</div>
+			</div>
 
 			<div class='row'>
 				<div class='form-group col-sm-2'>

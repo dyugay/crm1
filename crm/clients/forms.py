@@ -146,6 +146,7 @@ class createPersonForm(forms.Form):
 	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
+	position = forms.CharField(max_length=20, label='Должность', error_messages=my_default_errors, required=False, initial='')
 	#focalPoint = forms.BooleanField(label='Основной контакт', error_messages=my_default_errors, required=False, initial=False)
 	author = forms.CharField(max_length = 20, label='Автор записи')
 
@@ -234,6 +235,7 @@ class createPersonForm(forms.Form):
 						 extensionTelNum3 = self.cleaned_data.get('extensionTelNum3'),
 						 email1 = self.cleaned_data.get('email1'),
 						 email2 = self.cleaned_data.get('email2'),
+						 position = self.cleaned_data.get('position'),
 						 #focalPoint = self.cleaned_data.get('focalPoint'),
 						 author = user,
 						 changedOn = datetime.today(),
@@ -254,6 +256,7 @@ class changePersonForm(forms.Form):
 	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
+	position = forms.CharField(max_length=20, label='Должность', error_messages=my_default_errors, required=False, initial='')
 	#focalPoint = forms.BooleanField(label='Основной контакт', error_messages=my_default_errors, required=False)
 	author = forms.CharField(max_length = 20, label='Автор последнего изменения')
 	changedOn = forms.DateField(label='Дата последнего изменения', required=False)
@@ -343,6 +346,7 @@ class changePersonForm(forms.Form):
 		person.extensionTelNum3 = self.cleaned_data.get('extensionTelNum3')
 		person.email1 = self.cleaned_data.get('email1')
 		person.email2 = self.cleaned_data.get('email2')
+		person.position = self.cleaned_data.get('position')
 		#person.focalPoint = self.cleaned_data.get('focalPoint')
 		person.author = currentUser
 		#person.changedOn = datetime.today()
