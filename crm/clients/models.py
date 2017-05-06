@@ -34,7 +34,7 @@ class ClientContactDetails(models.Model):
 class Legal_details(models.Model):
 	client = models.ForeignKey(Client)
 	city = models.CharField(max_length = 20)
-	address = models.CharField(max_length = 40)
+	address = models.CharField(max_length = 60)
 	company_name = models.CharField(max_length = 40)
 	author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
 	changedOn = models.DateField(auto_now = True, null=True)

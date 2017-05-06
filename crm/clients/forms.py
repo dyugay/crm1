@@ -433,7 +433,7 @@ class changeClientLKForm(forms.Form):
 class addLegalDetailsForm(forms.Form):
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors)
 	city = forms.CharField(max_length = 20, label='Город', error_messages=my_default_errors, initial='')
-	address = forms.CharField(max_length = 40, label='Адрес', error_messages=my_default_errors, initial='', required=False)
+	address = forms.CharField(max_length = 60, label='Адрес', error_messages=my_default_errors, initial='', required=False)
 	company_name = forms.CharField(max_length = 40, label='Компания', error_messages=my_default_errors, initial='', required=False)
 	author = forms.CharField(max_length = 20, label='Автор изменений', error_messages=my_default_errors, required=False)
 	changedOn = forms.DateField(label='Дата изменений', error_messages=my_default_errors, required=False)
@@ -456,7 +456,7 @@ class addLegalDetailsForm(forms.Form):
 class changeLegalDetailsForm(forms.Form):
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors)
 	city = forms.CharField(max_length = 20, label='Город', error_messages=my_default_errors, initial='')
-	address = forms.CharField(max_length = 40, label='Адрес', error_messages=my_default_errors, initial='', required=False)
+	address = forms.CharField(max_length = 60, label='Адрес', error_messages=my_default_errors, initial='', required=False)
 	company_name = forms.CharField(max_length = 40, label='Компания', error_messages=my_default_errors, initial='', required=False)
 	author = forms.CharField(max_length = 20, label='Автор изменений', error_messages=my_default_errors, required=False)
 	changedOn = forms.DateField(label='Дата изменений', error_messages=my_default_errors, required=False)
@@ -641,7 +641,7 @@ class clientsByPersonsForm(forms.Form):
 class clientsByLegalDetailsForm(forms.Form):
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors, required=False)
 	city = forms.CharField(max_length = 20, label='Город', error_messages=my_default_errors, initial='', required=False)
-	address = forms.CharField(max_length = 40, label='Адрес', error_messages=my_default_errors, initial='', required=False)
+	address = forms.CharField(max_length = 60, label='Адрес', error_messages=my_default_errors, initial='', required=False)
 	company_name = forms.CharField(max_length = 40, label='Компания', error_messages=my_default_errors, initial='', required=False)
 
 
