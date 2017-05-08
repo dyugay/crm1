@@ -15,9 +15,10 @@ from clients.helpers import get_order_related_data, paginate, initOrderFilterFor
 from clients.helpers import initClientsByPersonsFormData
 from clients.helpers import get_client_data, get_that_clientId_url, get_orders, get_clients_by_persons_search_criteria
 from clients.helpers import get_clients_by_LK_search_criteria, get_clients_by_legal_details_search_criteria, initClientsByLegalDetailsFormData
-from clients.helpers import get_status_numbers, get_week_analytics, iterate_by_date, init_data_for_orders_report
+from clients.helpers import get_status_numbers, get_week_analytics, iterate_by_date, init_data_for_orders_report, create_csv_response
 from django.contrib.auth.models import User
 from django.contrib import messages
+
 
 # main page
 @login_required
@@ -607,13 +608,19 @@ def reports(request, *args, **kwargs):
 def report_orders(request, *args, **kwargs):
 	#return HttpResponse('report orders')
 	
-	
-	
 	if request.method=='POST':
 		form = report_orders_form(request.POST)
+		
+		
 		if form.is_valid():
-			url = form.get_filter_url(pg=kwargs.get('pageNum'))
-			return HttpResponseRedirect(url)
+			if 'download' in request.POST:
+				order_numbers = iterate_by_date(request)
+				response = create_csv_response(order_numbers)
+				return response
+			else:
+				url = form.get_filter_url(pg=kwargs.get('pageNum'))
+				return HttpResponseRedirect(url)
+				
 		else:
 			return render(request,
 						'report_orders.html',
@@ -638,9 +645,18 @@ def report_orders(request, *args, **kwargs):
 						'form': form,
 						'users': users,
 					})
-
-
-
+					
+					
+					
+#@login_required
+#def download_report_orders(request):
+	
+	#response = HttpResponse(content_type='text/csv')
+	#response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
+	#writer = csv.writer(response)
+	#writer.writerow(['first', 'second'])
+	##return HttpResponse('download report orders')
+	#return response
 	
 
 

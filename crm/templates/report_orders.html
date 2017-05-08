@@ -86,7 +86,7 @@
 	
 
 			
-			<button class="btn btn-primary" type="submit">Применить фильтр</button>
+			<button class="btn btn-primary" type="submit" name='submit'>Применить фильтр</button>
 			<p>&nbsp;</p>
 
 
@@ -136,7 +136,7 @@
 			      </tbody> 
 			 </table>
 			{% csrf_token %}
-		</form>
+
 	
 			  <ul class="pagination">
 				 {% if left_offset > 1 %}  
@@ -169,8 +169,11 @@
 	
 			     {% endif %} 			  
 			  </ul>     
-	
+			  			<p>&nbsp;</p>
+			<button class="btn-link" type="download" name="download">Выгрузить в CSV файл</button>
 	  </div> 
+
+		</form>
   {% endblock %}
 </body>	 
 </html>

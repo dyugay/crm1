@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta, date
 from django.db.models import Q, F
 from calendar import monthrange
-
+import csv
+from django.http import HttpResponse
 
 #get data that is related to the order
 def get_order_related_data(order):
@@ -1162,6 +1163,21 @@ def init_data_for_orders_report(request):
 
 
 
+
+
+def create_csv_response(order_numbers):
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
+	writer = csv.writer(response)
+	writer.writerow(['Period', 'Glazok new leads', 'Glazok, successful', 'Glazok, dropped', 'Manggis new leads', 'Manggis, successful', 'Manggis, dropped', 'Glazok, regular', 'Manggis, regular', 'Total'])
+	
+	for numbers in order_numbers:
+		writer.writerow([numbers[0], numbers[1], numbers[2], numbers[3], numbers[4], numbers[5], numbers[6], numbers[7], numbers[8], numbers[9]])
+	
+	
+	#print 'form create_csv_response'
+	
+	return response
 
 
 
