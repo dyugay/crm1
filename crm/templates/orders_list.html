@@ -46,7 +46,15 @@
 					<input class="form-control" id="id_orderDateEnd" name="orderDateEnd" value='{{form.orderDateEnd.value}}' type="date">
 				</div>
 				
-
+				<div class='form-group col-sm-2'>
+					<label for='id_client_addedAtBegin'>{{form.client_addedAtBegin.label}}</label>
+					<input class="form-control" id="id_client_addedAtBegin" name="client_addedAtBegin" value='{{form.client_addedAtBegin.value}}' type="date">
+				</div>
+				
+				<div class='form-group col-sm-2'>
+					<label for='id_client_addedAtEnd'>{{form.client_addedAtEnd.label}}</label>
+					<input class="form-control" id="id_client_addedAtEnd" name="client_addedAtEnd" value='{{form.client_addedAtEnd.value}}' type="date">
+				</div>
 			</div>
 	
 	
@@ -60,8 +68,19 @@
 					<label for='id_call_onEnd'>{{form.call_onEnd.label}}</label>
 					<input class="form-control" id="id_call_onEnd" name="call_onEnd" value='{{form.call_onEnd.value}}' type="date">
 				</div>
-
+				
+				<div class='form-group col-sm-2'>
+					<label for='id_is_client_new_or_regular'>{{form.is_client_new_or_regular.label}}</label>
+					<select class='form-control' name="is_client_new_or_regular" id='id_is_client_new_or_regular'>
+							<option value='all'>Все</option>
+							<option value="new" {% if form.is_client_new_or_regular.value == 'new'%}selected{% endif %}>нет, только новые</option>
+							<option value="regular" {% if form.is_client_new_or_regular.value == 'regular'%}selected{% endif %}>да</option>
+					</select>
+				</div>
 			</div>
+			
+				
+			
 			
 			<button class="btn btn-primary" type="submit">Применить фильтр</button>
 			<p>&nbsp;</p>
@@ -70,20 +89,20 @@
 				
 				<div class='form-group col-sm-2'>
 				<strong>
-						<li>Заинтересованность <a href="/orders_list/1/?status=INTS&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{ints_number}}</a></li> 
-						<li>На оценке <a href="/orders_list/1/?status=EVAL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{eval_number}}</a></li>
-						<li>Подготовка предложения <a href="/orders_list/1/?status=OFER&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{ofer_number}}</a></li>
+						<li>Заинтересованность <a href="/orders_list/1/?status=INTS&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{ints_number}}</a></li> 
+						<li>На оценке <a href="/orders_list/1/?status=EVAL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{eval_number}}</a></li>
+						<li>Подготовка предложения <a href="/orders_list/1/?status=OFER&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{ofer_number}}</a></li>
 				</div>
 				
 				<div class='form-group col-sm-2'>
-						<li>В ожидании <a href="/orders_list/1/?status=WAIT&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{wait_number}}</a></li> 
-						<li>Доставка <a href="/orders_list/1/?status=DVLR&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{dvlr_number}}</a></li> 
-						<li>На исполнении <a href="/orders_list/1/?status=PROC&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{proc_number}}</a></li> 
+						<li>В ожидании <a href="/orders_list/1/?status=WAIT&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{wait_number}}</a></li> 
+						<li>Доставка <a href="/orders_list/1/?status=DVLR&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{dvlr_number}}</a></li> 
+						<li>На исполнении <a href="/orders_list/1/?status=PROC&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{proc_number}}</a></li> 
 				</div>
 
 				<div class='form-group col-sm-2'>
-						<li>Выполнено <a href="/orders_list/1/?status=DONE&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{done_number}}</a></li> 
-						<li>Отказов <a href="/orders_list/1/?status=FAIL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}"> {{fail_number}}</a></li>
+						<li>Выполнено <a href="/orders_list/1/?status=DONE&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{done_number}}</a></li> 
+						<li>Отказов <a href="/orders_list/1/?status=FAIL&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}"> {{fail_number}}</a></li>
 					
 				</div>
 				</strong>
@@ -104,7 +123,8 @@
 						<th>Тип обращения</th>
 						<th>Статус</th>
 						<th>Менеджер заказа</th>
-						<th>Когда создан</th>
+						<th>Дата создания заказа</th>
+						<th>Дата создания клиента</th>
 				 </tr>
 				 </thead>
 				 
@@ -146,6 +166,7 @@
 							</select>
 						</td>
 						<td></td>
+						<td></td>
 					</tr>
 				    
 					{% for orders in page.object_list %}
@@ -160,6 +181,7 @@
 						<td>{{orders.order.get_status_display}}</td>
 						<td>{{orders.order.manager}}</td>
 						<td>{{orders.date_step|date:"d.m.Y, H:i"}}</td>
+						<td>{{orders.order.client.addedAt|date:"d.m.Y"}}</td>
 	
 				    </tr>
 					{% endfor %}
@@ -172,7 +194,7 @@
 				 {% if left_offset > 1 %}  
 			
 	
-					<li><a href="/orders_list/1/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}">{{pg}}   <<  </a></li>
+					<li><a href="/orders_list/1/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}">{{pg}}   <<  </a></li>
 	
 				 {% endif %} 
 			
@@ -185,7 +207,7 @@
 				 	      <li>
 					    {% endif %}
 	
-				           <a href="/orders_list/{{pg}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}">{{pg}}</a>
+				           <a href="/orders_list/{{pg}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}">{{pg}}</a>
 	
 				          </li>
 			   
@@ -195,7 +217,7 @@
 			     
 			     {% if right_offset < paginator.num_pages %}
 	
-				          <li><a href="/orders_list/{{paginator.num_pages}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}">{{pg}}  >> </a></li>
+				          <li><a href="/orders_list/{{paginator.num_pages}}/?status={{form.status.value}}&orderId={{form.orderId.value}}&orderDateEnd={{form.orderDateEnd.value}}&orderDateBegin={{form.orderDateBegin.value}}&manager={{form.manager.value}}&call_onBegin={{form.call_onBegin.value}}&call_onEnd={{form.call_onEnd.value}}&email1={{form.email1.value}}&telephoneNum1={{form.telephoneNum1.value}}&firstName={{form.firsnName.value}}&step_description={{form.step_description.value}}&clientId={{form.clientId.value}}&call_or_email={{form.call_or_email.value}}&client_addedAtEnd={{form.client_addedAtEnd.value}}&clientId={{form.clientId.value}}&client_addedAtBegin={{form.client_addedAtBegin.value}}&is_client_new_or_regular={{form.is_client_new_or_regular.value}}">{{pg}}  >> </a></li>
 	
 			     {% endif %} 			  
 			  </ul>     

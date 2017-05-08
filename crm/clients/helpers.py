@@ -5,7 +5,7 @@ from django.http import Http404
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta, date
-from django.db.models import Q
+from django.db.models import Q, F
 from calendar import monthrange
 
 
@@ -191,6 +191,14 @@ def get_that_clientId_url(id):
 def get_orders(request):
 
 	orders = Order_process.objects.filter(step=1)
+	
+	if request.GET.get('is_client_new_or_regular') == 'new':
+		orders = orders.filter(date_step__date = F('order__client__addedAt'))
+	elif request.GET.get('is_client_new_or_regular') == 'regular':
+		orders = orders.exclude(date_step__date = F('order__client__addedAt'))
+
+	#debug
+	#orders = orders.filter(order__client__addedAt=F(date_step))
 
 
 	#search string for client id
@@ -281,6 +289,20 @@ def get_orders(request):
 			call_onEnd = datetime.strptime(request.GET.get('call_onEnd'), "%Y-%m-%d")
 		
 			orders = orders.filter(order__call_on__range=(request.GET.get('call_onBegin'), call_onEnd))
+
+
+
+	#search for client creatin date - addedAt
+	if request.GET.get('client_addedAtBegin') \
+		and request.GET.get('client_addedAtEnd') \
+		and request.GET.get('client_addedAtBegin') != 'None' \
+		and request.GET.get('client_addedAtEnd') != 'None':
+		
+			
+			client_addedAtEnd = datetime.strptime(request.GET.get('client_addedAtEnd'), "%Y-%m-%d")
+		
+			orders = orders.filter(order__client__addedAt__range=(request.GET.get('client_addedAtBegin'), client_addedAtEnd))
+
 
 	orders = orders.order_by('-id')
 
@@ -377,12 +399,26 @@ def initOrderFilterFormData(request):
 		call_onBegin = str(date(2011, 01, 01))
 	else:
 		call_onBegin = request.GET.get('call_onBegin')
+		
+		
+		
+		
+		
+	if request.GET.get('client_addedAtBegin') == None:
+		client_addedAtBegin = str(date(2011, 01, 01))
+	else:
+		client_addedAtBegin = request.GET.get('client_addedAtBegin')
 	
 
-	#if request.GET.get('call_onEnd') == None:
-		#call_onEnd = str(date.today())
-	#else:
-		#call_onEnd = request.GET.get('call_onEnd')
+	if request.GET.get('client_addedAtEnd') == None:
+		client_addedAtEnd = str(date.today())
+	else:
+		client_addedAtEnd = request.GET.get('client_addedAtEnd')
+
+	if request.GET.get('is_client_new_or_regular') == None:
+		is_client_new_or_regular = 'all'
+	else:
+		is_client_new_or_regular = request.GET.get('is_client_new_or_regular')
 					
 					
 					
@@ -399,6 +435,9 @@ def initOrderFilterFormData(request):
 					'email1': email1,
 					'step_description': step_description,
 					'call_or_email': call_or_email,
+					'client_addedAtBegin': client_addedAtBegin,
+					'client_addedAtEnd': client_addedAtEnd,
+					'is_client_new_or_regular':is_client_new_or_regular,
 					}
 	
 	return initial_data
@@ -713,7 +752,11 @@ def get_status_numbers(**kwargs):
 	
 	else:
 		orders = Order_process.objects.filter(step=1)
-	
+		
+		if request.GET.get('is_client_new_or_regular') == 'new':
+			orders = orders.filter(date_step__date = F('order__client__addedAt'))
+		elif request.GET.get('is_client_new_or_regular') == 'regular':
+			orders = orders.exclude(date_step__date = F('order__client__addedAt'))
 	
 		#search string for client id
 		if request.GET.get('clientId'):
@@ -901,6 +944,7 @@ def iterate_by_date(request):
 	orderDateEnd = datetime.strptime(orderDateEnd, "%Y-%m-%d")
 
 
+
 	###################
 	#prepare Query sets
 	#make some transformation beacause last date is condering by django as date and 00:00:00 time
@@ -929,15 +973,22 @@ def iterate_by_date(request):
 			day = orderDateBegin
 			while day<=orderDateEnd: 
 
-				Glazok_numbers = Glazok_orders.filter(date_step__date=day).count()
-				Glazok_numbers_DONE = Glazok_orders.filter(date_step__date=day, order__status = 'DONE').count()
-				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__date=day, order__status = 'FAIL').count()
-				Manggis_numbers = Manggis_orders.filter(date_step__date=day).count()
-				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__date=day, order__status = 'DONE').count()
-				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__date=day, order__status = 'FAIL').count()
-				total = Glazok_numbers + Manggis_numbers 
+				Glazok_numbers =  Glazok_orders.filter(order__client__addedAt=day, date_step__date = F('order__client__addedAt')).count()
+				Glazok_numbers_DONE = Glazok_orders.filter(order__client__addedAt=day, date_step__date = F('order__client__addedAt'), order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(order__client__addedAt=day, date_step__date = F('order__client__addedAt'), order__status = 'FAIL').count()
+				Glazok_old_client_numbers = Glazok_orders.filter(date_step__date=day).count() - Glazok_numbers 
+
+				Manggis_numbers = Manggis_orders.filter(order__client__addedAt=day, date_step__date = F('order__client__addedAt')).count()
+				Manggis_numbers_DONE =  Manggis_orders.filter(order__client__addedAt=day, date_step__date = F('order__client__addedAt'), order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(order__client__addedAt=day, date_step__date = F('order__client__addedAt'), order__status = 'FAIL').count()
+				Manggis_old_client_numbers = Manggis_orders.filter(date_step__date=day).count() - Manggis_numbers
+
+
+				total = Glazok_numbers + Manggis_numbers + Manggis_old_client_numbers + Glazok_old_client_numbers
+
 				orderDateBegin_link = day
 				orderDateEnd_link = day
+				
 				order_numbers.append((orderDateBegin_link, 
 										Glazok_numbers, 
 										Manggis_numbers, 
@@ -945,31 +996,16 @@ def iterate_by_date(request):
 										Glazok_numbers_FAIL, 
 										Manggis_numbers_DONE, 
 										Manggis_numbers_FAIL,
+										Glazok_old_client_numbers,
+										Manggis_old_client_numbers,
 										total,
-											orderDateEnd_link,
+										orderDateEnd_link,
 											))
 				day = day + timedelta(days=1)
 
 				
 
 	elif request.GET.get('group_by') == 'MONTH':
-			#month = datetime.date(orderDateBegin).month
-			#month_end = datetime.date(orderDateEnd).month
-			#while month<=month_end:
-				#Glazok_numbers = Glazok_orders.filter(date_step__month=month).count()
-				#Glazok_numbers_DONE = Glazok_orders.filter(date_step__month=month, order__status = 'DONE').count()
-				#Glazok_numbers_FAIL = Glazok_orders.filter(date_step__month=month, order__status = 'FAIL').count()
-				#Manggis_numbers = Manggis_orders.filter(date_step__month=month).count()
-				#Manggis_numbers_DONE =  Manggis_orders.filter(date_step__month=month, order__status = 'DONE').count()
-				#Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__month=month, order__status = 'FAIL').count()
-				#date_begin_link, date_end_link = set_begin_n_end_day_for_period(request.GET.get('group_by'))
-				#total = Glazok_numbers + Manggis_numbers 
-				#order_numbers.append((month, Glazok_numbers, Manggis_numbers, 
-											#Glazok_numbers_DONE, Glazok_numbers_FAIL, 
-											#Manggis_numbers_DONE, Manggis_numbers_FAIL,
-											#total))
-				#month = month + 1
-				#debug
 			day = datetime(orderDateBegin.year, orderDateBegin.month, 1)
 			while day<=orderDateEnd: 
 				if day < orderDateBegin:
@@ -984,14 +1020,20 @@ def iterate_by_date(request):
 				#make some transformation beacause last date is condering by django as date and 00:00:00 time
 				orderDateEnd1 = orderDateEnd_link + timedelta(days=1)
 
-				#print 'begin:', orderDateBegin_link, "end:", orderDateEnd_link 
-				Glazok_numbers = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1)).count()
-				Glazok_numbers_DONE = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'DONE').count()
-				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'FAIL').count()
-				Manggis_numbers = Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1)).count()
-				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'DONE').count()
-				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1), order__status = 'FAIL').count()
-				total = Glazok_numbers + Manggis_numbers 
+
+				Glazok_numbers = Glazok_orders.filter(order__client__addedAt__range=(orderDateBegin_link, orderDateEnd_link), date_step__date = F('order__client__addedAt')).count()
+				Glazok_old_client_numbers = Glazok_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1)).count() - Glazok_numbers
+				Glazok_numbers_DONE = Glazok_orders.filter(order__client__addedAt__range=(orderDateBegin_link, orderDateEnd_link), date_step__date = F('order__client__addedAt'), order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(order__client__addedAt__range=(orderDateBegin_link, orderDateEnd_link), date_step__date = F('order__client__addedAt'), order__status = 'FAIL').count()
+				
+				
+				Manggis_numbers = Manggis_orders.filter(order__client__addedAt__range=(orderDateBegin_link, orderDateEnd_link), date_step__date = F('order__client__addedAt')).count()
+				Manggis_old_client_numbers = Manggis_orders.filter(date_step__range=(orderDateBegin_link, orderDateEnd1)).count() - Manggis_numbers
+				Manggis_numbers_DONE =  Manggis_orders.filter(order__client__addedAt__range=(orderDateBegin_link, orderDateEnd_link), date_step__date = F('order__client__addedAt'), order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(order__client__addedAt__range=(orderDateBegin_link, orderDateEnd_link), date_step__date = F('order__client__addedAt'), order__status = 'FAIL').count()
+				
+				
+				total = Glazok_numbers +  Manggis_numbers + Glazok_old_client_numbers + Manggis_old_client_numbers
 
 				order_numbers.append((orderDateBegin_link, 
 												Glazok_numbers, 
@@ -1000,12 +1042,13 @@ def iterate_by_date(request):
 												Glazok_numbers_FAIL, 
 												Manggis_numbers_DONE, 
 												Manggis_numbers_FAIL,
+												Glazok_old_client_numbers,
+												Manggis_old_client_numbers,
 												total,
-												orderDateEnd_link
+												orderDateEnd_link,
 												))
 				day = day + timedelta(days=monthrange(day.year, day.month)[1])
-				#print 'day', day
-				#print
+
 
 			
 	elif request.GET.get('group_by') == 'YEAR':
@@ -1024,13 +1067,18 @@ def iterate_by_date(request):
 				#print "begin:", orderDateBegin_link, "end:", orderDateEnd_link 
 				#print
 				
-				Glazok_numbers = Glazok_orders.filter(date_step__year=year).count()
-				Glazok_numbers_DONE = Glazok_orders.filter(date_step__year=year, order__status = 'DONE').count()
-				Glazok_numbers_FAIL = Glazok_orders.filter(date_step__year=year, order__status = 'FAIL').count()
-				Manggis_numbers = Manggis_orders.filter(date_step__year=year).count()
-				Manggis_numbers_DONE =  Manggis_orders.filter(date_step__year=year, order__status = 'DONE').count()
-				Manggis_numbers_FAIL =  Manggis_orders.filter(date_step__year=year, order__status = 'FAIL').count()
-				total = Glazok_numbers + Manggis_numbers 
+				Glazok_numbers = Glazok_orders.filter(order__client__addedAt__year=year, date_step__date = F('order__client__addedAt')).count()
+				Glazok_old_client_numbers = Glazok_orders.filter(date_step__year=year).count() - Glazok_numbers
+				Glazok_numbers_DONE = Glazok_orders.filter(order__client__addedAt__year=year, date_step__date = F('order__client__addedAt'), order__status = 'DONE').count()
+				Glazok_numbers_FAIL = Glazok_orders.filter(order__client__addedAt__year=year, date_step__date = F('order__client__addedAt'), order__status = 'FAIL').count()
+				
+				Manggis_numbers = Manggis_orders.filter(order__client__addedAt__year=year, date_step__date = F('order__client__addedAt')).count()
+				Manggis_old_client_numbers = Manggis_orders.filter(date_step__year=year).count() - Manggis_numbers
+				Manggis_numbers_DONE =  Manggis_orders.filter(order__client__addedAt__year=year, date_step__date = F('order__client__addedAt'), order__status = 'DONE').count()
+				Manggis_numbers_FAIL =  Manggis_orders.filter(order__client__addedAt__year=year, date_step__date = F('order__client__addedAt'), order__status = 'FAIL').count()
+				
+				total = Glazok_numbers + Manggis_numbers + Manggis_old_client_numbers + Glazok_old_client_numbers
+				
 				order_numbers.append((orderDateBegin_link,
 										Glazok_numbers, 
 										Manggis_numbers, 
@@ -1038,6 +1086,8 @@ def iterate_by_date(request):
 										Glazok_numbers_FAIL, 
 										Manggis_numbers_DONE, 
 										Manggis_numbers_FAIL,
+										Glazok_old_client_numbers,
+										Manggis_old_client_numbers,
 										total,
 										orderDateEnd_link,
 										))

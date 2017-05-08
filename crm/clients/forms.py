@@ -22,7 +22,7 @@ my_default_errors = {
 
 class newOrderForm(forms.Form):
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors)
-	call_or_email = forms.CharField(max_length = 8, label="Тип обращения", error_messages=my_default_errors)
+	call_or_email = forms.CharField(max_length = 8, label="Тип обращения", initial='', error_messages=my_default_errors)
 	step_description = forms.CharField(label="Описание шага", error_messages=my_default_errors, initial='')
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
 	call_on = forms.DateField(label="Когда связаться с клиентом", error_messages=my_default_errors)
@@ -568,8 +568,10 @@ class createClientForm(forms.Form):
 class orderListFilterForm(forms.Form):
 	manager = forms.CharField(max_length = 20, label="Менеджер заказа", error_messages=my_default_errors)
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
-	orderDateBegin = forms.DateField(label="Дата создания, с", error_messages=my_default_errors, required=False)
-	orderDateEnd = forms.DateField(label="Дата создания, по", error_messages=my_default_errors, required=False)
+	orderDateBegin = forms.DateField(label="Дата создания заказа, с", error_messages=my_default_errors, required=False)
+	orderDateEnd = forms.DateField(label="Дата создания заказа, по", error_messages=my_default_errors, required=False)
+	client_addedAtBegin = forms.DateField(label="Дата создания клиента, с", error_messages=my_default_errors, required=False)
+	client_addedAtEnd = forms.DateField(label="Дата создания клиента, по", error_messages=my_default_errors, required=False)
 	call_onBegin = forms.DateField(label="Позвонить клиенту, с", error_messages=my_default_errors, required=False)
 	call_onEnd = forms.DateField(label="Позвонить клиенту, по", error_messages=my_default_errors, required=False)
 	clientId = forms.CharField(max_length = 10, label='Клиент', error_messages=my_default_errors, initial='', required=False)
@@ -579,6 +581,8 @@ class orderListFilterForm(forms.Form):
 	email1 = forms.CharField(max_length = 40, label='Email', error_messages=my_default_errors, initial='', required=False)
 	step_description = forms.CharField(max_length = 100, label='Запрос клиента', initial='', error_messages=my_default_errors, required=False)
 	call_or_email = forms.CharField(max_length = 8, label='Тип обращения', initial='', error_messages=my_default_errors, required=False)
+	is_client_new_or_regular = forms.CharField(max_length = 7, label='Повторные обращения?', initial='', error_messages=my_default_errors, required=False)
+	
 
 
 	def get_filter_url(self, **kwars):
@@ -608,6 +612,9 @@ class orderListFilterForm(forms.Form):
 																						'call_onBegin': self.cleaned_data.get('call_onBegin'),
 																						'call_onEnd': self.cleaned_data.get('call_onEnd'),
 																						'call_or_email': self.cleaned_data.get('call_or_email'),
+																						'client_addedAtBegin': self.cleaned_data.get('client_addedAtBegin'),
+																						'client_addedAtEnd': self.cleaned_data.get('client_addedAtEnd'),
+																						'is_client_new_or_regular': self.cleaned_data.get('is_client_new_or_regular'),
 																						})
 
 		return url
