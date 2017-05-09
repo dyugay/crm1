@@ -1172,7 +1172,7 @@ def create_csv_response(order_numbers):
 	writer.writerow(['Period', 'Glazok new leads', 'Glazok, successful', 'Glazok, dropped', 'Manggis new leads', 'Manggis, successful', 'Manggis, dropped', 'Glazok, regular', 'Manggis, regular', 'Total'])
 	
 	for numbers in order_numbers:
-		writer.writerow([numbers[0], numbers[1], numbers[2], numbers[3], numbers[4], numbers[5], numbers[6], numbers[7], numbers[8], numbers[9]])
+		writer.writerow([numbers[0], numbers[1], numbers[3], numbers[4], numbers[2], numbers[5], numbers[6], numbers[7], numbers[8], numbers[9]])
 	
 	
 	#print 'form create_csv_response'
