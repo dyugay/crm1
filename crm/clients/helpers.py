@@ -205,16 +205,18 @@ def get_orders(request):
 	#search string for client id
 	if request.GET.get('clientId'):
 		search_clientId_str = request.GET.get('clientId')
-		search_clientId_str = replace_special_symbols_str(search_clientId_str)
-		orders = orders.filter(order__client__id__iregex = search_clientId_str) 
+		#search_clientId_str = replace_special_symbols_str(search_clientId_str)
+		#orders = orders.filter(order__client__id__iregex = search_clientId_str) 
+		orders = orders.filter(order__client__id__contains = search_clientId_str) 
 
 
 
 	#searxch string for orderId
 	if request.GET.get('orderId'):
 		search_orderId_str = request.GET.get('orderId')
-		search_orderId_str = replace_special_symbols_str(search_orderId_str)
-		orders = orders.filter(order__id__iregex = search_orderId_str) 
+		#search_orderId_str = replace_special_symbols_str(search_orderId_str)
+		#orders = orders.filter(order__id__iregex = search_orderId_str) 
+		orders = orders.filter(order__id__icontains = search_orderId_str) 
 
 
 
@@ -222,22 +224,26 @@ def get_orders(request):
 	#search string for firstName
 	if request.GET.get('firstName'):
 		search_firstName_str = request.GET.get('firstName')
-		search_firstName_str = replace_special_symbols_str(search_firstName_str)
-		orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
+		#search_firstName_str = replace_special_symbols_str(search_firstName_str)
+		#orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
+		orders = orders.filter(order__contactPerson__firstName__icontains = search_firstName_str)
 
 		
 	#search string for telephoneNum1
 	if request.GET.get('telephoneNum1'):
 		search_telephoneNum1_str = request.GET.get('telephoneNum1')
-		search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
-		orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
+		#search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
+		#orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
+		orders = orders.filter(order__contactPerson__telephoneNum1__icontains = search_telephoneNum1_str)
 
 
 	#search string for email1
 	if request.GET.get('email1'):
 		search_email1_str = request.GET.get('email1')
-		search_email1_str = replace_special_symbols_str(search_email1_str)
-		orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
+		#search_email1_str = replace_special_symbols_str(search_email1_str)
+		#orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
+		orders = orders.filter(order__contactPerson__email1__icontains = search_email1_str)
+		
 
 
 
@@ -246,8 +252,9 @@ def get_orders(request):
 	#search string for step_description
 	if request.GET.get('step_description'):
 		search_step_description_str = request.GET.get('step_description')
-		search_step_description_str = replace_special_symbols_str(search_step_description_str)
-		orders = orders.filter(step_description__iregex = search_step_description_str)
+		#search_step_description_str = replace_special_symbols_str(search_step_description_str)
+		#orders = orders.filter(step_description__iregex = search_step_description_str)
+		orders = orders.filter(step_description__icontains = search_step_description_str)
 		
 	
 	#search string for call_or_email
@@ -610,28 +617,32 @@ def get_clients_by_persons_search_criteria(request):
 	#search string for firstName
 	if request.GET.get('firstName'):
 		search_firstName_str = request.GET.get('firstName')
-		search_firstName_str = replace_special_symbols_str(search_firstName_str)
-		persons = persons.filter(firstName__iregex = search_firstName_str)
+		#search_firstName_str = replace_special_symbols_str(search_firstName_str)
+		#persons = persons.filter(firstName__iregex = search_firstName_str)
+		persons = persons.filter(firstName__icontains = search_firstName_str)
 		
 
 	#search string for lastName
 	if request.GET.get('lastName'):
 		search_lastName_str = request.GET.get('lastName')
-		search_lastName_str = replace_special_symbols_str(search_lastName_str)
-		persons = persons.filter(lastName__iregex = search_lastName_str)
+		#search_lastName_str = replace_special_symbols_str(search_lastName_str)
+		#persons = persons.filter(lastName__iregex = search_lastName_str)
+		persons = persons.filter(lastName__icontains = search_lastName_str)
 		
 	
 	#search string for telephoneNum1
 	if request.GET.get('telephoneNum'):
 		search_telephoneNum_str = request.GET.get('telephoneNum')
-		search_telephoneNum_str = replace_special_symbols_str(search_telephoneNum_str)
-		persons = persons.filter(Q(telephoneNum1__iregex = search_telephoneNum_str)|Q(telephoneNum2__iregex = search_telephoneNum_str)|Q(telephoneNum3__iregex = search_telephoneNum_str))
+		#search_telephoneNum_str = replace_special_symbols_str(search_telephoneNum_str)
+		#persons = persons.filter(Q(telephoneNum1__iregex = search_telephoneNum_str)|Q(telephoneNum2__iregex = search_telephoneNum_str)|Q(telephoneNum3__iregex = search_telephoneNum_str))
+		persons = persons.filter(Q(telephoneNum1__icontains = search_telephoneNum_str)|Q(telephoneNum2__icontains = search_telephoneNum_str)|Q(telephoneNum3__icontains = search_telephoneNum_str))
 		
 	#search string for email
 	if request.GET.get('email'):
 		search_email_str = request.GET.get('email')
-		search_email_str = replace_special_symbols_str(search_email_str)
-		persons = persons.filter(Q(email1__iregex = search_email_str)|Q(email2__iregex = search_email_str))
+		#search_email_str = replace_special_symbols_str(search_email_str)
+		#persons = persons.filter(Q(email1__iregex = search_email_str)|Q(email2__iregex = search_email_str))
+		persons = persons.filter(Q(email1__icontains = search_email_str)|Q(email2__icontains = search_email_str))
 
 	return persons
 	
@@ -647,14 +658,16 @@ def get_clients_by_LK_search_criteria(request):
 	#search string for client id
 	if request.GET.get('clientId'):
 		search_clientId_str = request.GET.get('clientId')
-		search_clientId_str = replace_special_symbols_str(search_clientId_str)
-		LKs = LKs.filter(client__id__iregex = search_clientId_str) 
+		#search_clientId_str = replace_special_symbols_str(search_clientId_str)
+		#LKs = LKs.filter(client__id__iregex = search_clientId_str) 
+		LKs = LKs.filter(client__id__icontains = search_clientId_str) 
 
 	#search string for LK
 	if request.GET.get('LK'):
 		search_LK_str = request.GET.get('LK')
-		search_LK_str = replace_special_symbols_str(search_LK_str)
-		LKs = LKs.filter(LK__iregex = search_LK_str)
+		#search_LK_str = replace_special_symbols_str(search_LK_str)
+		#LKs = LKs.filter(LK__iregex = search_LK_str)
+		LKs = LKs.filter(LK__icontains = search_LK_str)
 
 	return LKs
 	
@@ -669,28 +682,32 @@ def get_clients_by_legal_details_search_criteria(request):
 	#search string for client id
 	if request.GET.get('clientId'):
 		search_clientId_str = request.GET.get('clientId')
-		search_clientId_str = replace_special_symbols_str(search_clientId_str)
-		legal_details = legal_details.filter(client__id__iregex = search_clientId_str) 
+		#search_clientId_str = replace_special_symbols_str(search_clientId_str)
+		#legal_details = legal_details.filter(client__id__iregex = search_clientId_str) 
+		legal_details = legal_details.filter(client__id__icontains = search_clientId_str) 
 
 	#search string for city
 	if request.GET.get('city'):
 		search_city_str = request.GET.get('city')
-		search_city_str = replace_special_symbols_str(search_city_str)
-		legal_details = legal_details.filter(city__iregex = search_city_str)
+		#search_city_str = replace_special_symbols_str(search_city_str)
+		#legal_details = legal_details.filter(city__iregex = search_city_str)
+		legal_details = legal_details.filter(city__icontains = search_city_str)
 
 
 	#search string for address
 	if request.GET.get('address'):
 		search_address_str = request.GET.get('address')
-		search_address_str = replace_special_symbols_str(search_address_str)
-		legal_details = legal_details.filter(address__iregex = search_address_str)
+		#search_address_str = replace_special_symbols_str(search_address_str)
+		#legal_details = legal_details.filter(address__iregex = search_address_str)
+		legal_details = legal_details.filter(address__icontains = search_address_str)
 
 
 	#search string for company_name
 	if request.GET.get('company_name'):
 		search_company_name_str = request.GET.get('company_name')
-		search_company_name_str = replace_special_symbols_str(search_company_name_str)
-		legal_details = legal_details.filter(company_name__iregex = search_company_name_str)
+		#search_company_name_str = replace_special_symbols_str(search_company_name_str)
+		#legal_details = legal_details.filter(company_name__iregex = search_company_name_str)
+		legal_details = legal_details.filter(company_name__icontains = search_company_name_str)
 
 	return legal_details
 
@@ -762,16 +779,18 @@ def get_status_numbers(**kwargs):
 		#search string for client id
 		if request.GET.get('clientId'):
 			search_clientId_str = request.GET.get('clientId')
-			search_clientId_str = replace_special_symbols_str(search_clientId_str)
-			orders = orders.filter(order__client__id__iregex = search_clientId_str) 
+			#search_clientId_str = replace_special_symbols_str(search_clientId_str)
+			#orders = orders.filter(order__client__id__iregex = search_clientId_str) 
+			orders = orders.filter(order__client__id__icontains = search_clientId_str) 
 	
 	
 	
-		#searxch string for orderId
+		#search string for orderId
 		if request.GET.get('orderId'):
 			search_orderId_str = request.GET.get('orderId')
-			search_orderId_str = replace_special_symbols_str(search_orderId_str)
-			orders = orders.filter(order__id__iregex = search_orderId_str) 
+			#search_orderId_str = replace_special_symbols_str(search_orderId_str)
+			#orders = orders.filter(order__id__iregex = search_orderId_str) 
+			orders = orders.filter(order__id__icontains = search_orderId_str) 
 	
 	
 	
@@ -779,22 +798,25 @@ def get_status_numbers(**kwargs):
 		#search string for firstName
 		if request.GET.get('firstName'):
 			search_firstName_str = request.GET.get('firstName')
-			search_firstName_str = replace_special_symbols_str(search_firstName_str)
-			orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
+			#search_firstName_str = replace_special_symbols_str(search_firstName_str)
+			#orders = orders.filter(order__contactPerson__firstName__iregex = search_firstName_str)
+			orders = orders.filter(order__contactPerson__firstName__icontains = search_firstName_str)
 	
 			
 		#search string for telephoneNum1
 		if request.GET.get('telephoneNum1'):
 			search_telephoneNum1_str = request.GET.get('telephoneNum1')
-			search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
-			orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
+			#search_telephoneNum1_str = replace_special_symbols_str(search_telephoneNum1_str)
+			#orders = orders.filter(order__contactPerson__telephoneNum1__iregex = search_telephoneNum1_str)
+			orders = orders.filter(order__contactPerson__telephoneNum1__icontains = search_telephoneNum1_str)
 	
 	
 		#search string for email1
 		if request.GET.get('email1'):
 			search_email1_str = request.GET.get('email1')
-			search_email1_str = replace_special_symbols_str(search_email1_str)
-			orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
+			#search_email1_str = replace_special_symbols_str(search_email1_str)
+			#orders = orders.filter(order__contactPerson__email1__iregex = search_email1_str)
+			orders = orders.filter(order__contactPerson__email1__icontains = search_email1_str)
 	
 	
 	
@@ -803,8 +825,9 @@ def get_status_numbers(**kwargs):
 		#search string for step_description
 		if request.GET.get('step_description'):
 			search_step_description_str = request.GET.get('step_description')
-			search_step_description_str = replace_special_symbols_str(search_step_description_str)
-			orders = orders.filter(step_description__iregex = search_step_description_str)
+			#search_step_description_str = replace_special_symbols_str(search_step_description_str)
+			#orders = orders.filter(step_description__iregex = search_step_description_str)
+			orders = orders.filter(step_description__icontains = search_step_description_str)
 			
 	
 	
