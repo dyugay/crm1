@@ -1168,7 +1168,7 @@ def init_data_for_orders_report(request):
 def create_csv_response(order_numbers):
 	response = HttpResponse(content_type='text/csv')
 	response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
-	writer = csv.writer(response)
+	writer = csv.writer(response, delimiter=';')
 	writer.writerow(['Period', 'Glazok new leads', 'Glazok, successful', 'Glazok, dropped', 'Manggis new leads', 'Manggis, successful', 'Manggis, dropped', 'Glazok, regular', 'Manggis, regular', 'Total'])
 	
 	for numbers in order_numbers:
