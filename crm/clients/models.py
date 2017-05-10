@@ -28,7 +28,7 @@ class ClientContactDetails(models.Model):
   firstName = models.CharField(max_length = 20)
   lastName = models.CharField(max_length = 40)
   middleName = models.CharField(max_length = 40)
-  position = models.CharField(max_length=20, default='')
+  position = models.CharField(max_length=40, default='')
   author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
   addedAt = models.DateField(auto_now_add = True)
 
@@ -62,7 +62,7 @@ class Persons(models.Model):
 	extensionTelNum3 = models.CharField(max_length = 5, default='')
 	email1 = models.EmailField(default='')
 	email2 = models.EmailField(default='')
-	position = models.CharField(max_length=20, default='')
+	position = models.CharField(max_length=40, default='')
 	author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
 	changedOn = models.DateField(auto_now = True)
 
