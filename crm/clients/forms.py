@@ -256,7 +256,7 @@ class changePersonForm(forms.Form):
 	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
-	position = forms.CharField(max_length=20, label='Должность', error_messages=my_default_errors, required=False, initial='')
+	position = forms.CharField(max_length=40, label='Должность', error_messages=my_default_errors, required=False, initial='')
 	#focalPoint = forms.BooleanField(label='Основной контакт', error_messages=my_default_errors, required=False)
 	author = forms.CharField(max_length = 20, label='Автор последнего изменения')
 	changedOn = forms.DateField(label='Дата последнего изменения', required=False)
