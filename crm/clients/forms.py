@@ -27,7 +27,7 @@ class newOrderForm(forms.Form):
 	status = forms.CharField(max_length = 20, label="Статус заказа", initial='', error_messages=my_default_errors)
 	call_on = forms.DateField(label="Когда связаться с клиентом", error_messages=my_default_errors)
 	manager = forms.CharField(max_length = 20, label="Менеджер заказа", error_messages=my_default_errors)
-	contactPersonId = forms.IntegerField(label="Контактное лицо", error_messages=my_default_errors)
+	contactPersonId = forms.IntegerField(label="Контактное лицо", error_messages=my_default_errors, initial='')
 	author = forms.CharField(max_length = 20, label='Автор записи', error_messages=my_default_errors)
 
 		

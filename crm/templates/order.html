@@ -80,6 +80,7 @@
 					<div class="form-group col-sm-5">
 						<label for='id_contactPersonId'>{{form.contactPersonId.label}}</label>
 						<select class='form-control' name='contactPersonId' id='id_contactPersonId'>
+								<option value="" {% if form.contactPersonId.value == "" %}selected {%endif%}>
 							{% for person in persons %}
 								<option value="{{person.id}}" {% if person.get_id_str == form.contactPersonId.value %}selected{% endif%}>
 																								{{person.firstName}}

@@ -84,6 +84,7 @@
 									<th>Статус</th>
 									<th>Когда связаться</th>
 									<th>Менеджер</th>
+									<th>Контактное лицо</th>
 									<th>Тип обращения</th>
 								</tr>	 
 							</thead>	
@@ -96,6 +97,7 @@
 									<td>{{order.get_status_display}}</td>
 									<td>{{order.call_on|date:"d.m.Y"}}</td>
 									<td>{{order.manager}}</td>
+									<td>{{order.contactPerson.firstName}} {{order.contactPerson.middleName}} {{order.contactPerson.lastName}}  </td>
 									<td>{{order.call_or_email}}</td>
 							    </tr>
 								{% endfor %}
