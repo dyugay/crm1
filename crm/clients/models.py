@@ -62,7 +62,7 @@ class Persons(models.Model):
 	extensionTelNum3 = models.CharField(max_length = 5, default='')
 	email1 = models.EmailField(default='')
 	email2 = models.EmailField(default='')
-	position = models.CharField(max_length=40, default='')
+	position = models.CharField(max_length=80, default='')
 	author = models.ForeignKey(User, null = True, on_delete = models.DO_NOTHING)
 	changedOn = models.DateField(auto_now = True)
 
