@@ -140,9 +140,9 @@ class createPersonForm(forms.Form):
 	firstName = forms.CharField(max_length = 20, label='Имя', error_messages=my_default_errors, initial='')
 	lastName = forms.CharField(max_length =20, label='Фамилия', error_messages=my_default_errors, required=False, initial='')
 	middleName = forms.CharField(max_length = 20, label='Отчетство', error_messages=my_default_errors, required=False, initial='')
-	telephoneNum1 = forms.CharField(max_length = 16, label='Телефон 1', error_messages=my_default_errors, required=False, initial='')
-	telephoneNum2 = forms.CharField(max_length = 16, label='Телефон 2', error_messages=my_default_errors, required=False, initial='')
-	telephoneNum3 = forms.CharField(max_length = 16, label='Телефон 3', error_messages=my_default_errors, required=False, initial='')
+	telephoneNum1 = forms.CharField(max_length = 16, label='Моб.тел 1', error_messages=my_default_errors, required=False, initial='')
+	telephoneNum2 = forms.CharField(max_length = 16, label='Моб.тел 2', error_messages=my_default_errors, required=False, initial='')
+	telephoneNum3 = forms.CharField(max_length = 16, label='Городской тел.', error_messages=my_default_errors, required=False, initial='')
 	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
@@ -156,8 +156,9 @@ class createPersonForm(forms.Form):
 		if telephoneNum1:
 			personId = self.cleaned_data.get('personId')
 			persons = check_telephoneNum(telephoneNum1)
+
 			if persons:
-				persons = persons.exclude(id=personId)
+				persons = persons.exclude(id=personId) #, client.id=clientId)
 				for person in persons:
 						raise forms.ValidationError(u'Номер уже существует в базе, принадлежит клиенту: №%(clientId)s,  %(firstName)s', params={ 'clientId': person.client.id,
 																																		'firstName':person.firstName}, code='invalid')
@@ -181,9 +182,10 @@ class createPersonForm(forms.Form):
 		telephoneNum3 = self.cleaned_data.get('telephoneNum3')
 		if telephoneNum3:
 			personId = self.cleaned_data.get('personId')
+			clientId = self.cleaned_data.get('clientId')
 			persons = check_telephoneNum(telephoneNum3)
 			if persons:
-				persons = persons.exclude(id=personId)
+				persons = persons.exclude(id=personId).exclude(client__id=clientId)
 				for person in persons:
 						raise forms.ValidationError(u'Номер уже существует в базе, принадлежит клиенту: №%(clientId)s,  %(firstName)s', params={ 'clientId': person.client.id,
 																																			'firstName':person.firstName}, code='invalid')
@@ -250,9 +252,9 @@ class changePersonForm(forms.Form):
 	firstName = forms.CharField(max_length = 20, label='Имя', error_messages=my_default_errors, initial='')
 	lastName = forms.CharField(max_length =20, label='Фамилия', error_messages=my_default_errors, required=False, initial='')
 	middleName = forms.CharField(max_length = 20, label='Отчетство', error_messages=my_default_errors, required=False, initial='')
-	telephoneNum1 = forms.CharField(max_length = 16, label='Телефон 1', error_messages=my_default_errors, required=False, initial='')
-	telephoneNum2 = forms.CharField(max_length = 16, label='Телефон 2', error_messages=my_default_errors, required=False, initial='')
-	telephoneNum3 = forms.CharField(max_length = 16, label='Телефон 3', error_messages=my_default_errors, required=False, initial='')
+	telephoneNum1 = forms.CharField(max_length = 16, label='Моб.тел 1', error_messages=my_default_errors, required=False, initial='')
+	telephoneNum2 = forms.CharField(max_length = 16, label='Моб.тел 2', error_messages=my_default_errors, required=False, initial='')
+	telephoneNum3 = forms.CharField(max_length = 16, label='Городской тел.', error_messages=my_default_errors, required=False, initial='')
 	extensionTelNum3  = forms.CharField(max_length=5, label='Добавочный номер 3', error_messages=my_default_errors, required=False, initial='')
 	email1 = forms.EmailField(max_length = 40, label='e-mail 1', error_messages=my_default_errors, required=False, initial='')
 	email2 = forms.EmailField(max_length = 40, label='e-mail 2', error_messages=my_default_errors, required=False, initial='')
@@ -288,14 +290,17 @@ class changePersonForm(forms.Form):
 																																			'firstName':person.firstName}, code='invalid')
 		return telephoneNum2
 		
-
+		
+	#check land line
 	def clean_telephoneNum3(self):
 		telephoneNum3 = self.cleaned_data.get('telephoneNum3')
 		if telephoneNum3:
 			personId = self.cleaned_data.get('personId')
+			clientId = self.cleaned_data.get('clientId')
+
 			persons = check_telephoneNum(telephoneNum3)
 			if persons:
-				persons = persons.exclude(id=personId)
+				persons = persons.exclude(id=personId).exclude(client__id=clientId)
 				for person in persons:
 						raise forms.ValidationError(u'Номер уже существует в базе, принадлежит клиенту: №%(clientId)s,  %(firstName)s', params={ 'clientId': person.client.id,
 																																			'firstName':person.firstName}, code='invalid')

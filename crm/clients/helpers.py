@@ -9,6 +9,8 @@ from django.db.models import Q, F
 from calendar import monthrange
 import csv
 from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+
 
 #get data that is related to the order
 def get_order_related_data(order):
@@ -1202,6 +1204,68 @@ def create_csv_response(order_numbers):
 	
 	return response
 
+def create_csv_order_list(orders_list):
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
+	writer = csv.writer(response, delimiter=';')
+	writer.writerow(['Order', 
+						'Client',
+						'Status', 
+						'Site', 
+						'Manager', 
+						'Date', 
+						'Name', 
+						'Last Name', 
+						'Middle name', 
+						'tel1', 
+						'tel2', 
+						'tel3',
+						'email1',
+						'email2',
+						'Position',
+						'City',
+						'Address',
+						'Company',
+						'Login',
+						'Comment',
+						 ])
+	
+	for orders in orders_list:
+		name = orders[6].encode('utf-8')
+		last_name = orders[7].encode('utf-8')
+		middle_name = orders[8].encode('utf-8')
+		position = orders[14].encode('utf-8')
+		city = orders[15].encode('utf-8')
+		address = orders[16].encode('utf-8')
+		company = orders[17].encode('utf-8')
+		comment = orders[19].encode('utf-8')
+		
+		
+		writer.writerow([	orders[0], 
+							orders[1],
+							orders[2], 
+							orders[3], 
+							orders[4], 
+							orders[5],
+							name,
+							last_name,
+							middle_name,
+							orders[9],
+							orders[10],
+							orders[11],
+							orders[12],
+							orders[13],
+							position,
+							city,
+							address,
+							company,
+							orders[18],
+							comment,
+							])
+	
+
+	
+	return response
 
 
 #def set_begin_n_end_day_for_period(period_type):
@@ -1215,6 +1279,75 @@ def create_csv_response(order_numbers):
 		##print period_type
 	
 	#return date_begin, date_end
+	
+
+
+def get_data_for_download():
+	orders_list = []
+	
+	for person in Persons.objects.all():
+		
+	
+		for order in Order.objects.filter(client__id = person.client.id):
+			step_description = ''
+			for order_proc in Order_process.objects.filter(order__id = order.id):
+				step_description = step_description + str(order_proc.date_step) + ': ' + order_proc.step_description + '.     '
+			
+
+			legal_details = Legal_details.objects.filter(client__id = person.client.id) 
+			if legal_details:
+				city = legal_details[0].city
+				address = legal_details[0].address
+				company_name = legal_details[0].company_name
+			else:
+				city = ''
+				address = ''
+				company_name = ''
+				
+				
+			
+			lk_qs = LK.objects.filter(client__id = person.client.id)
+			if lk_qs:
+				cabinet = lk_qs[0].LK
+			else:
+				cabinet = ''
+				 
+			
+			
+			
+			orders_list.append((
+								order.id, 
+								order.client.id,
+								order.status,
+								order.call_or_email,
+								order.manager,
+								order.changedOn,
+								
+								person.firstName,
+								person.lastName,
+								person.middleName,
+								person.telephoneNum1,
+								person.telephoneNum2,
+								person.telephoneNum3,
+								person.email1,
+								person.email2,
+								person.position,
+								
+								city,
+								address,
+								company_name,
+								
+								cabinet,
+
+								
+								step_description,
+								
+								
+								))
+			
+
+	return orders_list
+
 
 
 

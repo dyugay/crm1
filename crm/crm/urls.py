@@ -23,6 +23,7 @@ from clients.views import changeLegalDetails, createClient, get_clients_by_perso
 from clients.views import get_clients_by_legal_details, reports, report_orders # download_report_orders
 from django.conf import settings
 from django.conf.urls.static import static
+from clients.views import download_orders
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -48,7 +49,7 @@ urlpatterns = [
 	url(r'^clients_by_legal_details/(?P<pageNum>\d+)*/*$', get_clients_by_legal_details, name='get_clients_by_legal_details'),
 	url(r'^reports/.*$', reports, name='reports'),
 	url(r'^report_orders/(?P<pageNum>\d+)*/*/$', report_orders, name='report_orders'),
-	#url(r'^download_report_orders/$', download_report_orders, name='download_report_orders'),
+	url(r'^download_orders/$', download_orders, name='download_orders'),
 
 
 ] 

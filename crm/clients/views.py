@@ -12,10 +12,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from clients.models import Order, Order_process, Client, Persons, LK, Legal_details
 from clients.helpers import get_order_related_data, paginate, initOrderFilterFormData, initClientsByLKFormData
-from clients.helpers import initClientsByPersonsFormData
+from clients.helpers import initClientsByPersonsFormData, get_data_for_download
 from clients.helpers import get_client_data, get_that_clientId_url, get_orders, get_clients_by_persons_search_criteria
 from clients.helpers import get_clients_by_LK_search_criteria, get_clients_by_legal_details_search_criteria, initClientsByLegalDetailsFormData
-from clients.helpers import get_status_numbers, get_week_analytics, iterate_by_date, init_data_for_orders_report, create_csv_response
+from clients.helpers import get_status_numbers, get_week_analytics, iterate_by_date, init_data_for_orders_report, create_csv_response, create_csv_order_list
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -648,9 +648,31 @@ def report_orders(request, *args, **kwargs):
 					
 					
 					
-#@login_required
-#def download_report_orders(request):
+@login_required
+def download_orders(request, *args, **kwargs):
 	
+	orders_list = get_data_for_download()
+	
+
+	if request.method=='POST' and \
+		'download' in request.POST:
+			response = create_csv_order_list(orders_list)
+			return response
+	else:
+		return render(
+						request,
+						'download_orders_list.html',
+						{
+							'orders_list':orders_list,
+						})
+	
+	
+
+	
+	
+	
+	
+	#return HttpResponse('Download orders')
 	#response = HttpResponse(content_type='text/csv')
 	#response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
 	#writer = csv.writer(response)
@@ -658,6 +680,49 @@ def report_orders(request, *args, **kwargs):
 	##return HttpResponse('download report orders')
 	#return response
 	
+	#if request.method=='POST':
+		#form=orderListFilterForm(request.POST)
+		
+		#if form.is_valid():
+			#url = form.get_filter_url(pg=kwargs.get('pageNum'))
+			#return HttpResponseRedirect(url)
+		#else:
+			#return render(
+				#request,
+				#'orders_list.html',
+				#{
+					#'form': form,
+				#}
+				#)
+	#else:
+		#orders_list = get_orders(request)
+		#status_numbers = get_status_numbers(request=request)
+		#paginatorAttr = paginate(request, orders_list, kwargs.get('pageNum'))
+		#users = User.objects.all()
+		#initial_data = initOrderFilterFormData(request)
+		#form=orderListFilterForm(initial=initial_data)
+
+	
+		#return render(
+					   #request,
+					   #'orders_list.html',
+					   #{'paginator': paginatorAttr.get('paginator'),
+						#'page': paginatorAttr.get('page'),
+						#'right_offset': paginatorAttr.get('right_offset'),
+						#'left_offset': paginatorAttr.get('left_offset'),
+						#'display_range': paginatorAttr.get('display_range'),
+						#'form': form,
+						#'users': users,
+						#'ints_number': status_numbers.get('INTS'),
+						#'eval_number': status_numbers.get('EVAL'),
+						#'ofer_number': status_numbers.get('OFER'),
+						#'wait_number': status_numbers.get('WAIT'),
+						#'dvlr_number': status_numbers.get('DVLR'),
+						#'proc_number': status_numbers.get('PROC'),
+						#'done_number': status_numbers.get('DONE'),
+						#'fail_number': status_numbers.get('FAIL'),
+						#}
+						 #)
 
 
 
