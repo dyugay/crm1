@@ -1208,7 +1208,7 @@ def create_csv_order_list(orders_list):
 	response = HttpResponse(content_type='text/csv')
 	response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
 	writer = csv.writer(response, delimiter=';')
-	writer.writerow(['Cделка', 
+	writer.writerow(['Название сделки', 
 						#'Client',
 						'Статус', 
 						'Сайт-источник', 
@@ -1348,13 +1348,31 @@ def get_data_for_download():
 			
 			order_name = 'order #' + str(order.id)
 			
+			
+			manager = str(order.manager)
+
+			if manager == 'Denis' or \
+			   manager == 'admin' or \
+			   manager == '':
+					manager = 'denis.y@glazok.kz'
+			elif manager == 'Manas':
+				manager = 'manas.k@glazok.kz'
+			elif manager == 'Marat':
+				manager = 'marat.b@glazok.kz'
+			elif manager == 'Galym':
+				manager = 'galym.k@glazok.kz'
+			else:
+				manager = ''
+			
+				
+			
+			
 			orders_list.append((
 								order_name, 
 								order.status,
 								order.call_or_email,
-								order.manager,
+								manager,
 								order.changedOn,
-								
 								person.firstName,
 								person.lastName,
 								person.middleName,
