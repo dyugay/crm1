@@ -35,7 +35,6 @@
 				 <thead>
 					<tr>
 						<th>Номер заказа</th>
-						<th>Номер клиента</th>
 						<th>Cтатус</th>
 						<th>Сайт</th>
 						<th>Менеджер</th>
@@ -61,10 +60,9 @@
 				 </thead>
 				 
 				 <tbody>
-					{% for orderId, clientId, status, call_or_email, manager, changedOn, firstName, lastName, middleName, tel1, tel2, tel3, email1, email2, position, city, address, company_name,  cabinet, step_description in orders_list%}
+					{% for orderId, status, call_or_email, manager, changedOn, firstName, lastName, middleName, tel1, tel2, tel3, email1, email2, position, city, address, company_name,  cabinet, step_description in orders_list%}
 						<tr>
 							<td>{{orderId}}</td>
-							<td>{{clientId}}</td>
 							<td>{{status}}</td>
 							<td>{{call_or_email}}</td>
 							<td>{{manager}}</td>

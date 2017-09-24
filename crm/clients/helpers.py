@@ -1208,58 +1208,58 @@ def create_csv_order_list(orders_list):
 	response = HttpResponse(content_type='text/csv')
 	response['Content-Disposition'] = 'attachment; filename="report_orders.csv"'
 	writer = csv.writer(response, delimiter=';')
-	writer.writerow(['Order', 
-						'Client',
-						'Status', 
-						'Site', 
-						'Manager', 
-						'Date', 
-						'Name', 
-						'Last Name', 
-						'Middle name', 
-						'tel1', 
-						'tel2', 
-						'tel3',
-						'email1',
-						'email2',
-						'Position',
-						'City',
-						'Address',
-						'Company',
-						'Login',
-						'Comment',
+	writer.writerow(['Cделка', 
+						#'Client',
+						'Статус', 
+						'Сайт-источник', 
+						'Ответственный', 
+						'Дата закрытия', 
+						'Имя', 
+						'Фамилия', 
+						'Отчество', 
+						'Мобильный телефон', 
+						'Мобильный телефон', 
+						'Мобильный телефон',
+						'Рабочий email',
+						'Рабочий email',
+						'Должность',
+						'Город',
+						'Адрес',
+						'Компания',
+						'Личный кабинет Glazok',
+						'Примечание к сделке',
 						 ])
 	
 	for orders in orders_list:
-		name = orders[6].encode('utf-8')
-		last_name = orders[7].encode('utf-8')
-		middle_name = orders[8].encode('utf-8')
-		position = orders[14].encode('utf-8')
-		city = orders[15].encode('utf-8')
-		address = orders[16].encode('utf-8')
-		company = orders[17].encode('utf-8')
-		comment = orders[19].encode('utf-8')
+		name = orders[5].encode('utf-8')
+		last_name = orders[6].encode('utf-8')
+		middle_name = orders[7].encode('utf-8')
+		position = orders[13].encode('utf-8')
+		city = orders[14].encode('utf-8')
+		address = orders[15].encode('utf-8')
+		company = orders[16].encode('utf-8')
+		comment = orders[18].encode('utf-8')
 		
 		
 		writer.writerow([	orders[0], 
-							orders[1],
+							#orders[1],
+							orders[1], 
 							orders[2], 
 							orders[3], 
-							orders[4], 
-							orders[5],
+							orders[4],
 							name,
 							last_name,
 							middle_name,
+							orders[8],
 							orders[9],
 							orders[10],
 							orders[11],
 							orders[12],
-							orders[13],
 							position,
 							city,
 							address,
 							company,
-							orders[18],
+							orders[17],
 							comment,
 							])
 	
@@ -1303,8 +1303,8 @@ def get_data_for_download():
 				city = ''
 				address = ''
 				company_name = ''
-				
-				
+			
+			company_name = 'client #' + str(order.client.id) + ': ' + company_name
 			
 			lk_qs = LK.objects.filter(client__id = person.client.id)
 			if lk_qs:
@@ -1313,11 +1313,43 @@ def get_data_for_download():
 				cabinet = ''
 				 
 			
+			if order.status == 'INTS':
+				order.status = 'Заинтересованность'
+			elif order.status == 'EVAL':
+				order.status = 'Оценка'
+			elif order.status == 'OFER':
+				order.status = 'Подготовка предложения'
+			elif order.status == 'FAIL':
+				order.status = 'Отказ'
+			elif order.status == 'WAIT':
+				order.status = 'Принимают решение'
+			elif order.status == 'DONE':
+				order.status = 'Успешно реализовано'
+			elif order.status == 'DVLR':
+				order.status = 'Доставка'
+			elif order.status == 'PROC':
+				order.status = 'Выполнение заказа'
 			
+			
+		
+			telephoneNum1 = str(person.telephoneNum1)
+			telephoneNum1 = telephoneNum1.replace("-", "")
+			telephoneNum1 = telephoneNum1.replace("+7", "8")
+			
+			
+			telephoneNum2 = str(person.telephoneNum2)
+			telephoneNum2 = telephoneNum2.replace("-", "")
+			telephoneNum2 = telephoneNum2.replace("+7", "8")
+			
+			
+			telephoneNum3 = str(person.telephoneNum3)
+			telephoneNum3 = telephoneNum3.replace("-", "")
+			telephoneNum3 = telephoneNum3.replace("+7", "8")
+			
+			order_name = 'order #' + str(order.id)
 			
 			orders_list.append((
-								order.id, 
-								order.client.id,
+								order_name, 
 								order.status,
 								order.call_or_email,
 								order.manager,
@@ -1326,9 +1358,9 @@ def get_data_for_download():
 								person.firstName,
 								person.lastName,
 								person.middleName,
-								person.telephoneNum1,
-								person.telephoneNum2,
-								person.telephoneNum3,
+								telephoneNum1,
+								telephoneNum2,
+								telephoneNum3,
 								person.email1,
 								person.email2,
 								person.position,
