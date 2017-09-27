@@ -1334,17 +1334,17 @@ def get_data_for_download():
 		
 			telephoneNum1 = str(person.telephoneNum1)
 			telephoneNum1 = telephoneNum1.replace("-", "")
-			telephoneNum1 = telephoneNum1.replace("+7", "8")
+			#telephoneNum1 = telephoneNum1.replace("+7", "8")
 			
 			
 			telephoneNum2 = str(person.telephoneNum2)
 			telephoneNum2 = telephoneNum2.replace("-", "")
-			telephoneNum2 = telephoneNum2.replace("+7", "8")
+			#telephoneNum2 = telephoneNum2.replace("+7", "8")
 			
 			
 			telephoneNum3 = str(person.telephoneNum3)
 			telephoneNum3 = telephoneNum3.replace("-", "")
-			telephoneNum3 = telephoneNum3.replace("+7", "8")
+			#telephoneNum3 = telephoneNum3.replace("+7", "8")
 			
 			order_name = 'order #' + str(order.id)
 			
